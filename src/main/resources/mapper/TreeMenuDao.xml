@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lonton.tree.treemenu.mapper.TreeMenuMapper">
+
+    <resultMap type="com.lonton.tree.treemenu.entity.TreeMenu" id="TreeMenuMap">
+        <result property="menuId" column="menu_id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="parentMenuId" column="parent_menu_id" jdbcType="INTEGER"/>
+        <result property="menuLevel" column="menu_level" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询所有行数据-->
+    <select id="queryAll" resultMap="TreeMenuMap">
+        select
+        menu_id, name, parent_menu_id, menu_level, sort
+        from tree_menu
+        <where>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="parentMenuId != null">
+                and parent_menu_id = #{parentMenuId}
+            </if>
+            <if test="menuLevel != null">
+                and menu_level = #{menuLevel}
+            </if>
+            <if test="sort != null">
+                and sort = #{sort}
+            </if>
+        </where>
+        ORDER BY
+        menu_id
+    </select>
+
+</mapper>
+
