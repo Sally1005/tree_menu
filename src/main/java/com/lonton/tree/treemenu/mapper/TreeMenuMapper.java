@@ -1,13 +1,13 @@
-package com.lonton.tree.treemenu.mapper;
+package com.loo.tree.treemenu.mapper;
 
-import com.lonton.tree.treemenu.entity.TreeMenu;
+import com.loo.tree.treemenu.entity.TreeMenu;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 /**
  * (TreeMenu)表数据库访问层
  *
- * @author 张利红
+ * @author
  */
 @Mapper
 public interface TreeMenuMapper {

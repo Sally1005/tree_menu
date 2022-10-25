@@ -1,15 +1,15 @@
-package com.lonton.tree.treemenu.dao;
+package com.loo.tree.treemenu.dao;
 
 import java.sql.Connection;
 import java.util.List;
-import com.lonton.tree.treemenu.common.util.ToolDruid;
+import com.loo.tree.treemenu.common.util.ToolDruid;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 /**
  * 开发BasicDao，作为其他Dao的父类
  *
- * @author :zhanglihong
+ * @author
  */
 public class BasicDao<T> {
     private QueryRunner queryRunner = new QueryRunner();

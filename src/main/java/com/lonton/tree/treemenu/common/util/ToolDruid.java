@@ -1,4 +1,4 @@
-package com.lonton.tree.treemenu.common.util;
+package com.loo.tree.treemenu.common.util;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import java.io.FileInputStream;
@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 /**
  * 数据库连接池工具类
- * @author 张利红
+ * @author
  */
 public class ToolDruid {
     private static DataSource dataSource;

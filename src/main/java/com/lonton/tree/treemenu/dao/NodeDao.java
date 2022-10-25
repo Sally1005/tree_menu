@@ -1,12 +1,11 @@
-package com.lonton.tree.treemenu.dao;
+package com.loo.tree.treemenu.dao;
 
-import com.lonton.tree.treemenu.entity.TreeMenu;
+import com.loo.tree.treemenu.entity.TreeMenu;
 
 /**
  * NodeDao类中含有BasicDao 类中的所有方法
- * @author:zhanglihong
+ *
  */
 
 public class NodeDao extends BasicDao<TreeMenu> {
-
 }
