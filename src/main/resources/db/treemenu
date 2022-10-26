@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `tree_menu`;
 
 CREATE TABLE `tree_menu` (
   `menu_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '当前菜单ID',
-  `name` varchar(255) DEFAULT NULL COMMENT '菜单名',
+  `menu_name` varchar(255) DEFAULT NULL COMMENT '菜单名',
   `parent_menu_id` bigint(20) DEFAULT NULL COMMENT '当前菜单的父菜单ID',
   `menu_level` int(11) DEFAULT NULL COMMENT '当前菜单的层级',
   `sort` int(11) DEFAULT NULL COMMENT '排序',
@@ -31,7 +31,9 @@ CREATE TABLE `tree_menu` (
 
 /*Data for the table `tree_menu` */
 
-insert  into `tree_menu`(`menu_id`,`name`,`parent_menu_id`,`menu_level`,`sort`) values 
+start transaction
+savepoint a
+insert  into `tree_menu`(`menu_id`,`menu_name`,`parent_menu_id`,`menu_level`,`sort`) values
 (1,'月度',0,1,0),
 (2,'价格',1,2,0),
 (3,'70个大中城市住宅销售价格指数',2,3,0),
@@ -164,6 +166,12 @@ insert  into `tree_menu`(`menu_id`,`name`,`parent_menu_id`,`menu_level`,`sort`) 
 (130,'香港特别行政区主要社会经济指标',100,2,0),
 (131,'澳门特别行政区主要社会经济指标',100,2,0),
 (132,'台湾省主要社会经济指标',100,2,0);
+savepoint b
+insert into `tree_menu`(`menu_id`,`menu_name`) values
+(133,'基础服务基本情况'),
+(134,'毕业生就业情况');
+rollback to b
+commit
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

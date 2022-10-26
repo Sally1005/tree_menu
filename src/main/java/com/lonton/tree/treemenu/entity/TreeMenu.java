@@ -1,4 +1,4 @@
-package com.loo.tree.treemenu.entity;
+package com.lonton.tree.treemenu.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * (TreeMenu)实体类
  *
- * @author
+ * @author 张利红
  */
 @Data
 public class TreeMenu implements Serializable {
@@ -20,7 +20,7 @@ public class TreeMenu implements Serializable {
     /**
      * 菜单名
      */
-    private String name;
+    private String menuName;
     /**
      * 当前菜单的父菜单ID
      */

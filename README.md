@@ -1,19 +1,124 @@
-
 # 项目介绍
-  该工程的主要目的是练习如何制作树形菜单。
-  其展示的是国家统计局统计页面（https://data.stats.gov.cn/tablequery.htm?code=AA0701）左侧的树结构，实现的功能为能将其存入数据库并在前端
-页面展示树结构。
+
+该工程的主要目的是练习如何制作树形菜单。前后端分离，前端项目名为treemenu-ui,后端的项目名为treemenu-web。目前已实现的功能有将数据存储在数据库中，模糊查询树的所有内容。在后续的学习中，会慢慢补充新的功能。
+
+
 
 # 开发环境
-   其后端开发环境为IDEA + mysql + druid + JDK1.8 + SpringBoot + mybatis,所实现的是在访问（http://localhost:8080/treeMenu/select
-AllWithTree）地址时返回json数据；前端主要使用了Vue + ElementUI 展示树形数据，使用 Axios 向后台发送请求并返回数据。当访问（http://localhost
-:8888/）地址时可以看到后台传回来的数据以树形的结构返回。
+
+其后端开发环境为IDEA + mysql + druid + JDK1.8 + SpringBoot + mybatis。
+
+项目演示地址：http://localhost:8080/treeMenu/selectAllWithTree    
+           http://localhost:8080/treeMenu/selectByWd
+
+
 
 # 目录结构
+
+```
+# 
+├─.idea        
+├─.mvn
+│  └─wrapper
+│          maven-wrapper.jar
+│          maven-wrapper.properties
+│          MavenWrapperDownloader.java      
+├─lib
+│      c3p0-0.9.1.2.jar
+│      commons-dbutils-1.7.jar
+│      druid-1.1.10.jar
+│      mysql-connector-java-8.0.15.jar     
+├─src
+│  ├─main
+│  │  ├─java
+│  │  │  └─com
+│  │  │      └─lonton
+│  │  │          └─tree
+│  │  │              └─treemenu
+│  │  │                  │  TreeMenuApplication.java
+│  │  │                  ├─common
+│  │  │                  │  ├─exception
+│  │  │                  │  │      GlobalException.java
+│  │  │                  │  │      GlobalExceptionHandler.java      
+│  │  │                  │  └─util
+│  │  │                  │          Result.java
+│  │  │                  │          ToolDruid.java          
+│  │  │                  ├─controller
+│  │  │                  │      TreeMenuController.java
+│  │  │                  ├─dao
+│  │  │                  │      BasicDao.java
+│  │  │                  │      ITreeMenuDao.java
+│  │  │                  │      NodeDao.java 
+│  │  │                  ├─entity
+│  │  │                  │      TreeMenu.java  
+│  │  │                  └─mapper
+│  │  │                          TreeMenuMapper.java                      
+│  │  └─resources
+│  │      │  application.properties
+│  │      │  druid.properties
+│  │      ├─db
+│  │      │      treemenu   
+│  │      ├─mapper
+│  │      │      TreeMenuMapper.xml   
+│  │      ├─static
+│  │      └─templates
+│  └─test
+│      └─java
+│          └─com
+│              └─lonton
+│                  └─tree
+│                      └─treemenu
+│                              TreeMenuApplicationTests.java                        
+└─target
+    ├─classes
+    │  │  application.properties
+    │  │  druid.properties 
+    │  ├─com
+    │  │  └─lonton
+    │  │      └─tree
+    │  │          └─treemenu
+    │  │              │  TreeMenuApplication.class 
+    │  │              ├─common
+    │  │              │  ├─exception
+    │  │              │  │      GlobalException.class
+    │  │              │  │      GlobalExceptionHandler.class   
+    │  │              │  └─util
+    │  │              │          Result.class
+    │  │              │          ToolDruid.class  
+    │  │              ├─controller
+    │  │              │      TreeMenuController.class 
+    │  │              ├─dao
+    │  │              │      BasicDao.class
+    │  │              │      ITreeMenuDao.class
+    │  │              │      NodeDao.class    
+    │  │              ├─entity
+    │  │              │      TreeMenu.class
+    │  │              └─mapper
+    │  │                      TreeMenuMapper.xml      
+    │  ├─db
+    │  │      treemenu     
+    │  └─mapper
+    │          TreeMenuMapper.xml
+    ├─generated-sources
+    │  └─annotations
+    ├─generated-test-sources
+    │  └─test-annotations
+    ├─maven-status
+    │  └─maven-compiler-plugin
+    │      └─compile
+    │          └─default-compile
+    │                  createdFiles.lst
+    │                  inputFiles.lst              
+    └─test-classes
+        └─com
+            └─lonton
+                └─tree
+                    └─treemenu
+                            TreeMenuApplicationTests.class
+```
 
 
 
 # 项目使用
-   拿到后端项目后直接启动TreeMenuApplication，在浏览器中输入（http://localhost:8080/treeMenu/selectAllWithTree）即可，拿到后端项目后
-在Terminal中输入命令：npm run serve,启动完成后访问（http://localhost:8888/）即可。若端口号被占用，可以在package.json下的scripts中进行
-如下修改： "serve": "vue-cli-service serve --port xxxx"。
+
+拿到项目后直接启动TreeMenuApplication，在浏览器中访问http://localhost:8080/treeMenu/selectAllWithTree / http://localhost:8080/treeMenu/selectByWd 即可。
