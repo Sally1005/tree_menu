@@ -28,13 +28,6 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.3</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons.dbutils</groupId>
-            <artifactId>commons-dbutils</artifactId>
-            <version>1.7</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/lib/commons-dbutils-1.7.jar</systemPath>
-        </dependency>
         <!--引入mybatis-plus依赖-->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -71,6 +64,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.1.0</version>
+        <scope>test</scope>
+    </dependency>
         <!--fastjson：实现对象与JSON的相互转换 -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -129,7 +128,7 @@
                 </executions>
             </plugin>
         </plugins>
-        <!-- 如果不添加此节点mybatis的mapper.xml文件都会被漏掉。 -->
+        <!-- 告诉maven，resources文件下的全部要进行编译 -->
         <resources>
             <resource>
                 <directory>src/main/java</directory>

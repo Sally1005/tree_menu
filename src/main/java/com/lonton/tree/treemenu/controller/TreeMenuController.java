@@ -1,5 +1,6 @@
 package com.lonton.tree.treemenu.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lonton.tree.treemenu.common.util.Result;
 import com.lonton.tree.treemenu.entity.TreeMenu;
 import com.lonton.tree.treemenu.mapper.TreeMenuMapper;
@@ -7,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+
 
 /**
  * (TreeMenu)表控制层
@@ -26,93 +29,94 @@ public class TreeMenuController {
     @Autowired
     TreeMenuMapper treeMenuMapper;
 
+
+    /**
+     * 获取所有数据
+     * @return
+     */
+    private  List<TreeMenu> getAllTreeMenu(){
+        log.debug("开始处理获取所有数据请求");
+        return treeMenuMapper.getAllTreeMenu();
+    }
+
     /**
      * 获取数据库数据，并处理成树形结构
      * @return 树形结构数据
      */
-
-
-    @GetMapping("selectAllWithTree")
-    public Result selectAllWithTree() {
-        return Result.ok().data("items", listWithTree());
+    @GetMapping("getMenuTree")
+    private Result queryAllWithTree() {
+        log.debug("开始处理将获取数据处理成树形结构请求");
+        return Result.ok().data("items",getMenuTree());
     }
     /**
-     * 获取数据库所有数据
-     * @return 所有数据
-     */
-    @GetMapping("selectAll")
-    public Result selectAll() {
-        return Result.ok().data("items",queryAll());
-    }
-
-    /**
-     * 根据名称查询数据
-     * @param wd 用户输入名称
+     * 按层排序取数:返回树形数据
      * @return
      */
-    @RequestMapping("selectByWd")
-    public Result selectByWd( String wd){
-        return Result.ok().data("items",treeMenuMapper.selectByWd(wd));
+    public List<TreeMenu> getMenuTree() {
+        List<TreeMenu> allTreeMenu = getAllTreeMenu();
+         // 最高级别集合
+        List<TreeMenu> roots = new ArrayList<>();
+        List<TreeMenu> res = new ArrayList<>();
+        for (TreeMenu treeMenu : allTreeMenu) {
+             // 1 表示最高级别
+            if(treeMenu.getMenuLevel() == 1){
+                roots.add(treeMenu);
+            }
+        }
+         // 从最高级别用户开始遍历，递归找到该用户的下级用户，将带有下级的最高级用户放入返回结果中
+        for (TreeMenu treeMenu : roots){
+             treeMenu= buildMenuTree(allTreeMenu, treeMenu);
+             res.add(treeMenu);
+        }
+        return res;
+    }
+    /**
+     * 根据传入的用户，获取该用户的下属集合，将集合赋值给该用户的children属性，返回该用户
+     * @param allTreeMenus
+     * @param treeMenu
+     * @return
+     */
+    public  TreeMenu buildMenuTree(List<TreeMenu> allTreeMenus,TreeMenu treeMenu){
+        List<TreeMenu> children = new ArrayList<>();
+        for (TreeMenu treeMenu1 : allTreeMenus){
+            if (treeMenu1.getMenuLevel() == 1)
+                continue;
+             // 当前用户的上级编号和传入的用户编号相等，表示该用户是传入用户的下级用户
+            if(treeMenu1.getParentMenuId() == treeMenu.getMenuId()){
+                 // 递归调用，再去寻找该用户的下级用户
+                treeMenu1 = buildMenuTree(allTreeMenus, treeMenu1);
+                // 当前用户是该用户的一个下级用户，放入children集合内
+                children.add(treeMenu1);
+            }
+        }
+        // 给该用户的children属性赋值，并返回该用户
+        treeMenu.setChildren(children);
+        return treeMenu;
     }
 
     /**
-     * 查询数据库所有数据
-     *
-     * @return 数据库所有数据
+     * 根据名称查询数
+     * @return
      */
-
-    public List queryAll() {
-        return treeMenuMapper.queryAll(null);
+    @RequestMapping("selectByMenuName")
+    public Result selectByMenuName( String menuName){
+        log.debug("开始处理【根据名称查询树形菜单】的请求");
+        return Result.ok().data("items",treeMenuMapper.selectByMenuName(menuName));
     }
 
-    /**
-     * 查询数据库数据，并处理后返回树形数据
-     *
-     * @return 树形数据
-     */
+/*
+ public Result<List<JSONObject>> tree() {
+        List<JSONObject> list=treeMenuMapper.tree();
+        System.out.println(list);
+        return Result.ok(list);
+    }
 
-    public List<TreeMenu> listWithTree() {
-        // 查找所有菜单数据
-        List<TreeMenu> lists = treeMenuMapper.queryAll(null);
-        // 把数据组合成树形结构
-        List result = lists.stream().filter(treeMenu -> treeMenu.getMenuLevel() == 1)
-                // 查找子菜单并放到第一级菜单中
-                .map(menu -> {
-                    menu.setTreeMenu(getChildren(menu, lists));
-                    return menu;
-                })
-                // 根据排序字段排序
-                .sorted((menu1, menu2) -> {
-                    return (menu1.getSort() == null ? 0 : menu1.getSort()) - (menu2.getSort() == null ? 0 : menu2.getSort());
-                })
-                // 把处理结果收集成一个 List 集合
-                .collect(Collectors.toList());
-        return result;
+    public Result<List<JSONObject>> tree2(Map<String, Object> user) {
+        int menuLevel=Integer.parseInt(user.get("id").toString()) ;
+        List<JSONObject> list=treeMenuMapper.tree2(menuLevel);
+        return Result.ok(list);
     }
-    /**
-     * 递归获取子菜单
-     *
-     * @param root 父菜单
-     * @param all 总的数据
-     * @return 子菜单
-     */
-    public List<TreeMenu> getChildren(TreeMenu root ,List<TreeMenu> all){
-        List<TreeMenu> children = all.stream()
-                // 根据父菜单 ID 查找当前菜单 ID，以便于找到当前菜单的子菜单
-                .filter(menu ->menu.getParentMenuId() == root.getMenuId())
-                // 递归查找子菜单的子菜单
-                .map((menu) -> {
-                    menu.setTreeMenu(getChildren(menu,all));
-                    return menu;
-                })
-                // 根据排序字段排序
-                .sorted((menu1, menu2) -> {
-                    return (menu1.getSort() == null ? 0 : menu1.getSort()) - (menu2.getSort() == null ? 0 : menu2.getSort());
-                })
-                // 把处理结果收集成一个 List 集合
-                .collect(Collectors.toList());
-        return children;
-    }
+ */
 
 
 }

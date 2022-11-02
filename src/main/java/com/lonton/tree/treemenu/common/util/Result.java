@@ -1,4 +1,4 @@
-package com.loo.tree.treemenu.common.util;
+package com.lonton.tree.treemenu.common.util;
 
 import lombok.Data;
 import org.apache.http.HttpStatus;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * 统一结果返回类。方法采用链式调用的写法（即返回类本身 return this）。
- * @author
+ * @author 张利红
  */
 @Data
 public class Result {

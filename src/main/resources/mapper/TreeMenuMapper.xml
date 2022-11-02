@@ -7,70 +7,56 @@
         <result property="menuName" column="menu_name" jdbcType="VARCHAR"/>
         <result property="parentMenuId" column="parent_menu_id" jdbcType="INTEGER"/>
         <result property="menuLevel" column="menu_level" jdbcType="INTEGER"/>
-        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="menuSort" column="menu_sort" jdbcType="INTEGER"/>
     </resultMap>
 
-
-    <!-- List<TreeMenu> selectByWd(String wd)-->
-    <select id="selectByWd" resultMap="TreeMenuMap">
+    <!-- List<TreeMenu> getAllTreeMenu()-->
+    <select id = "getAllTreeMenu" resultType="com.lonton.tree.treemenu.entity.TreeMenu">
+        select
+        menu_id, menu_name, parent_menu_id, menu_level, menu_sort
+        from tree_menu
+        <where>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+            <if test="menuName != null and menuName != ''">
+                and name = #{name}
+            </if>
+            <if test="parentMenuId != null">
+                and parent_menu_id = #{parentMenuId}
+            </if>
+            <if test="menuLevel != null">
+                and menu_level = #{menuLevel}
+            </if>
+            <if test="menuSort != null">
+                and  menu_sort = #{ menuSort}
+            </if>
+        </where>
+        ORDER BY
+        menu_id
+    </select>
+    <!-- List<TreeMenu> selectByMenuName(String menuName)-->
+    <select id="selectByMenuName" resultMap="TreeMenuMap">
         select
         *
         from tree_menu
         where
-        menu_name like concat('%',#{wd},'%')
+        menu_name like concat('%',#{menuName},'%')
     </select>
 
+    <select id="tree" resultType="com.alibaba.fastjson.JSONObject">
+  SELECT
+  menu_id, menu_name, parent_menu_id, menu_level, menu_sort
+ FROM tree_menu WHERE menu_level ='0'
+ </select>
 
-    <!-- List<TreeMenu> queryAll(TreeMenu treeMenu);-->
-    <select id="queryAll" resultMap="TreeMenuMap">
-        select
-        menu_id, menu_name, parent_menu_id, menu_level, sort
-        from tree_menu
-        <where>
-            <if test="menuId != null">
-                and menu_id = #{menuId}
-            </if>
-            <if test="menuName != null and menuName != ''">
-                and name = #{name}
-            </if>
-            <if test="parentMenuId != null">
-                and parent_menu_id = #{parentMenuId}
-            </if>
-            <if test="menuLevel != null">
-                and menu_level = #{menuLevel}
-            </if>
-            <if test="sort != null">
-                and sort = #{sort}
-            </if>
-        </where>
-        ORDER BY
-        menu_id
-    </select>
-    <!-- List<TreeMenu> listWithTree(TreeMenu treeMenu);-->
-    <select id="listWithTree" resultMap="TreeMenuMap">
-        select
-        menu_id, menu_name, parent_menu_id, menu_level, sort
-        from tree_menu
-        <where>
-            <if test="menuId != null">
-                and menu_id = #{menuId}
-            </if>
-            <if test="menuName != null and menuName != ''">
-                and name = #{name}
-            </if>
-            <if test="parentMenuId != null">
-                and parent_menu_id = #{parentMenuId}
-            </if>
-            <if test="menuLevel != null">
-                and menu_level = #{menuLevel}
-            </if>
-            <if test="sort != null">
-                and sort = #{sort}
-            </if>
-        </where>
-        ORDER BY
-        menu_id
-    </select>
+    <select id="tree2" resultType="com.alibaba.fastjson.JSONObject">
+   SELECT
+  menu_id, menu_name, parent_menu_id, menu_level, menu_sort
+ FROM tree_menu WHERE menu_level =#{menu_level}
+ </select>
+
+
 
 </mapper>
 

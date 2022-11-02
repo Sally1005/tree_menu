@@ -1,13 +1,13 @@
-package com.loo.tree.treemenu.common.exception;
+package com.lonton.tree.treemenu.common.exception;
 
-import com.loo.tree.treemenu.common.util.Result;
+import com.lonton.tree.treemenu.common.util.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * 全局异常处理类
- * @author
+ * @author 张利红
  */
 @Slf4j
 @RestControllerAdvice

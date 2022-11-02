@@ -32,12 +32,12 @@ public class TreeMenu implements Serializable {
     /**
      * 排序
      */
-    private Integer sort;
+    private Integer menuSort;
     /**
      * 用于保存一个菜单的子菜单
      */
     @TableField(exist = false)
-    private List<TreeMenu> treeMenu;
+    private List<TreeMenu> children;
     }
 
 

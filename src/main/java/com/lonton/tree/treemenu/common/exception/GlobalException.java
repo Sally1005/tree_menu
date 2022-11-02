@@ -1,4 +1,4 @@
-package com.loo.tree.treemenu.common.exception;
+package com.lonton.tree.treemenu.common.exception;
 
 import lombok.Data;
 import org.apache.http.HttpStatus;
@@ -6,7 +6,7 @@ import org.apache.http.HttpStatus;
 /**
  * 自定义异常类
  * 可以自定义 异常信息 message 以及 响应状态码 code（默认为 500）。
- * @author
+ * @author 张利红
  */
 @Data
 public class GlobalException extends RuntimeException {

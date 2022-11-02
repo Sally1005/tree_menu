@@ -1,7 +1,10 @@
 package com.lonton.tree.treemenu.mapper;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lonton.tree.treemenu.entity.TreeMenu;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,25 +18,30 @@ import java.util.List;
 @Repository
 public interface TreeMenuMapper {
     /**
-     * 查询所有数据
-     *
-     * @param treeMenu 实例对象
-     * @return 对象列表
+     * 获取所有数据
+     * @return
      */
-    List<TreeMenu> queryAll(TreeMenu treeMenu);
+    List<TreeMenu> getAllTreeMenu();
+
     /**
-     * 查询数据库数据，并处理后返回 树形数据
-     *
-     * @return 树形数据
+     * 树形数据返回数据
+     * @return
      */
-    List<TreeMenu> listWithTree(TreeMenu treeMenu);
+    List<TreeMenu> getMenuTree();
+
+    void  buildMenuTree();
 
     /**
      * 根据名称查询数据
-     * @param wd 输入名称
+     * @param
      * @return
      */
-    List<TreeMenu> selectByWd(String wd);
+    List<TreeMenu> selectByMenuName(String menuName);
+    /**
+     * 树
+     */
+    List<JSONObject> tree();
+    List<JSONObject> tree2(@Param("menuLevel")Integer menuLevel);
 
 }
 

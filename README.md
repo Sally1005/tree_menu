@@ -6,10 +6,10 @@
 
 # 开发环境
 
-其后端开发环境为IDEA + mysql + druid + JDK1.8 + SpringBoot + mybatis。
+其后端开发环境为IDEA + MySQL + Druid + SpringBoot + MyBatis。
 
-项目演示地址：http://localhost:8080/treeMenu/selectAllWithTree    
-           http://localhost:8080/treeMenu/selectByWd
+项目演示地址：http://localhost:8080/treeMenu/getMenuTree   
+           http://localhost:8080/treeMenu/selectByMenuName
 
 
 
@@ -17,17 +17,7 @@
 
 ```
 # 
-├─.idea        
-├─.mvn
-│  └─wrapper
-│          maven-wrapper.jar
-│          maven-wrapper.properties
-│          MavenWrapperDownloader.java      
-├─lib
-│      c3p0-0.9.1.2.jar
-│      commons-dbutils-1.7.jar
-│      druid-1.1.10.jar
-│      mysql-connector-java-8.0.15.jar     
+├─.idea            
 ├─src
 │  ├─main
 │  │  ├─java
@@ -35,87 +25,21 @@
 │  │  │      └─lonton
 │  │  │          └─tree
 │  │  │              └─treemenu
-│  │  │                  │  TreeMenuApplication.java
+│  │  │                  │ 
 │  │  │                  ├─common
-│  │  │                  │  ├─exception
-│  │  │                  │  │      GlobalException.java
-│  │  │                  │  │      GlobalExceptionHandler.java      
-│  │  │                  │  └─util
-│  │  │                  │          Result.java
-│  │  │                  │          ToolDruid.java          
-│  │  │                  ├─controller
-│  │  │                  │      TreeMenuController.java
-│  │  │                  ├─dao
-│  │  │                  │      BasicDao.java
-│  │  │                  │      ITreeMenuDao.java
-│  │  │                  │      NodeDao.java 
-│  │  │                  ├─entity
-│  │  │                  │      TreeMenu.java  
-│  │  │                  └─mapper
-│  │  │                          TreeMenuMapper.java                      
-│  │  └─resources
-│  │      │  application.properties
-│  │      │  druid.properties
-│  │      ├─db
-│  │      │      treemenu   
-│  │      ├─mapper
-│  │      │      TreeMenuMapper.xml   
-│  │      ├─static
-│  │      └─templates
-│  └─test
-│      └─java
-│          └─com
-│              └─lonton
-│                  └─tree
-│                      └─treemenu
-│                              TreeMenuApplicationTests.java                        
-└─target
-    ├─classes
-    │  │  application.properties
-    │  │  druid.properties 
-    │  ├─com
-    │  │  └─lonton
-    │  │      └─tree
-    │  │          └─treemenu
-    │  │              │  TreeMenuApplication.class 
-    │  │              ├─common
-    │  │              │  ├─exception
-    │  │              │  │      GlobalException.class
-    │  │              │  │      GlobalExceptionHandler.class   
-    │  │              │  └─util
-    │  │              │          Result.class
-    │  │              │          ToolDruid.class  
-    │  │              ├─controller
-    │  │              │      TreeMenuController.class 
-    │  │              ├─dao
-    │  │              │      BasicDao.class
-    │  │              │      ITreeMenuDao.class
-    │  │              │      NodeDao.class    
-    │  │              ├─entity
-    │  │              │      TreeMenu.class
-    │  │              └─mapper
-    │  │                      TreeMenuMapper.xml      
-    │  ├─db
-    │  │      treemenu     
-    │  └─mapper
-    │          TreeMenuMapper.xml
-    ├─generated-sources
-    │  └─annotations
-    ├─generated-test-sources
-    │  └─test-annotations
-    ├─maven-status
-    │  └─maven-compiler-plugin
-    │      └─compile
-    │          └─default-compile
-    │                  createdFiles.lst
-    │                  inputFiles.lst              
-    └─test-classes
-        └─com
-            └─lonton
-                └─tree
-                    └─treemenu
-                            TreeMenuApplicationTests.class
-```
+│  │  │                  │  ├─exception    // 异常包
+│  │  │                  │  │           
+│  │  │                  │  └─util        // 工具包
+│  │  │                  │                 
+│  │  │                  ├─controller    // 控制层
+│  │  │                  │     
+│  │  │                  ├─entity       // 内含实体类
+│  │  │                  │      
+│  │  │                  └─mapper      //持久层
+│  │  │                                        
+│  │  └─resources                     // 配置
+│  │      
+│  └─test                            // 测试  
 
 
 
