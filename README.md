@@ -15,8 +15,7 @@
 
 # 目录结构
 
-```
-├─.idea            
+```          
 ├─src
 │  ├─main
 │  │  ├─java
@@ -24,21 +23,14 @@
 │  │  │      └─lonton
 │  │  │          └─tree
 │  │  │              └─treemenu
-│  │  │                  │ 
 │  │  │                  ├─common
-│  │  │                  │  ├─exception    // 异常包
-│  │  │                  │  │           
-│  │  │                  │  └─util        // 工具包
-│  │  │                  │                 
-│  │  │                  ├─controller    // 控制层
-│  │  │                  │     
-│  │  │                  ├─entity       // 内含实体类
-│  │  │                  │      
-│  │  │                  └─mapper      //持久层
-│  │  │                                        
-│  │  └─resources                     // 配置
-│  │      
-│  └─test                            // 测试  
+│  │  │                  │  ├─exception     异常包      
+│  │  │                  │  └─util          工具包     
+│  │  │                  ├─controller       控制层  
+│  │  │                  ├─entity           内含实体类   
+│  │  │                  └─mapper           持久层                                       
+│  │  └─resources                           配置   
+│  └─test                                   测试  
 ```
 
 
