@@ -9,6 +9,7 @@ import java.util.List;
  * (TreeMenu)实体类
  *
  * @author 张利红
+ * date:2022-11-09
  */
 @Data
 public class TreeMenu implements Serializable {
@@ -38,7 +39,13 @@ public class TreeMenu implements Serializable {
      */
     @TableField(exist = false)
     private List<TreeMenu> children;
-    }
+    /**
+     * 判断是否为叶子节点
+     */
+    @TableField(exist = false)
+    private Boolean isLeaf = false;
+
+}
 
 
 
