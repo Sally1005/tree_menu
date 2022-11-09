@@ -1,18 +1,17 @@
 package com.lonton.tree.treemenu.mapper;
 
-import com.alibaba.fastjson.JSONObject;
 import com.lonton.tree.treemenu.entity.TreeMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * (TreeMenu)表数据库访问层
+ *(TreeMenu)表数据库访问层
  *
  * @author 张利红
+ * date:2022-11-09
  */
 @Mapper
 @Repository
@@ -24,24 +23,16 @@ public interface TreeMenuMapper {
     List<TreeMenu> getAllTreeMenu();
 
     /**
-     * 树形数据返回数据
+     * 获取根节点菜单
      * @return
      */
-    List<TreeMenu> getMenuTree();
-
-    void  buildMenuTree();
+    List<TreeMenu> getRootMenus();
 
     /**
-     * 根据名称查询数据
-     * @param
+     * 根据父节点查询子节点数据
+     * @param menuId
      * @return
      */
-    List<TreeMenu> selectByMenuName(String menuName);
-    /**
-     * 树
-     */
-    List<JSONObject> tree();
-    List<JSONObject> tree2(@Param("menuLevel")Integer menuLevel);
-
+    List<TreeMenu> getChildren(@Param("menuId") Long menuId);
 }
 
