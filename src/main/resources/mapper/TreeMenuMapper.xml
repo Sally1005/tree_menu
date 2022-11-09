@@ -10,7 +10,7 @@
         <result property="menuSort" column="menu_sort" jdbcType="INTEGER"/>
     </resultMap>
 
-    <!-- List<TreeMenu> getAllTreeMenu()-->
+      <!--List<TreeMenu> getAllTreeMenu()-->
     <select id = "getAllTreeMenu" resultType="com.lonton.tree.treemenu.entity.TreeMenu">
         select
         menu_id, menu_name, parent_menu_id, menu_level, menu_sort
@@ -35,28 +35,30 @@
         ORDER BY
         menu_id
     </select>
-    <!-- List<TreeMenu> selectByMenuName(String menuName)-->
-    <select id="selectByMenuName" resultMap="TreeMenuMap">
+
+    <!--List<TreeMenu> getRootMenus()-->
+    <select id = "getRootMenus" resultType="com.lonton.tree.treemenu.entity.TreeMenu">
         select
-        *
+        menu_id, menu_name, parent_menu_id, menu_level, menu_sort
         from tree_menu
-        where
-        menu_name like concat('%',#{menuName},'%')
+        <where>
+            parent_menu_id = 0
+        </where>
+        ORDER BY
+        menu_id
     </select>
 
-    <select id="tree" resultType="com.alibaba.fastjson.JSONObject">
-  SELECT
-  menu_id, menu_name, parent_menu_id, menu_level, menu_sort
- FROM tree_menu WHERE menu_level ='0'
- </select>
-
-    <select id="tree2" resultType="com.alibaba.fastjson.JSONObject">
-   SELECT
-  menu_id, menu_name, parent_menu_id, menu_level, menu_sort
- FROM tree_menu WHERE menu_level =#{menu_level}
- </select>
-
-
+    <!--List<TreeMenu> getChildren(@Param("menuId") Long menuId)-->
+    <select id = "getChildren" resultType="com.lonton.tree.treemenu.entity.TreeMenu">
+        select
+        menu_id, menu_name, parent_menu_id, menu_level, menu_sort
+        from tree_menu
+        <where>
+            parent_menu_id = #{menuId}
+        </where>
+        ORDER BY
+        menu_id
+    </select>
 
 </mapper>
 
