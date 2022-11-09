@@ -33,7 +33,7 @@ CREATE TABLE `tree_menu` (
 
 start transaction
 savepoint a
-insert  into `tree_menu`(`menu_id`,`menu_name`,`parent_menu_id`,`menu_level`,`sort`) values
+insert  into `tree_menu`(`menu_id`,`menu_name`,`parent_menu_id`,`menu_level`,`menu_sort`) values
 (1,'月度',0,1,0),
 (2,'价格',1,2,0),
 (3,'70个大中城市住宅销售价格指数',2,3,0),
