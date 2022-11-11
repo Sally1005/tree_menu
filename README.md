@@ -16,6 +16,7 @@
 # 目录结构
 
 ```          
+├─assets                                    SQL资源
 ├─src
 │  ├─main
 │  │  ├─java
