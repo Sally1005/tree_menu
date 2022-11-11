@@ -36,5 +36,8 @@
 
 
 # 项目使用
+1. 该工程是在 JDK1.8 环境下运行的,建议运行前先自行配置好环境变量;
+2. 首先克隆项目的地址,打开Intellij IDEA后,分别点击File > New > Project from Version Control,再将克隆下来的地址粘贴到URL框中;
+3. 展开src下的目录,运行TreeMenuApplication,在终端查看是否能够正常运行;
+4. 能够正常启动项目后,将assets下的sql文件拿到,在数据库中建表。
 
-拿到项目后直接启动TreeMenuApplication，在浏览器中访问http://localhost:8080/treeMenu/selectAllWithTree / http://localhost:8080/treeMenu/selectByWd 即可。
