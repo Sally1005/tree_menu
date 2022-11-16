@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * (TreeMenu)表控制层
- *
+ * <p/>
  * @author 张利红
  */
 @RestController
@@ -25,8 +25,8 @@ public class TreeMenuController {
     TreeMenuMapper treeMenuMapper;
 
     /**
-     * 获取根节点菜单
-     * @return
+     * 获取根节点菜单 <br/>
+     * @return  根节点菜单
      */
     @GetMapping("")
     public Result getRootMenus() {
@@ -39,9 +39,9 @@ public class TreeMenuController {
     }
 
     /**
-     * 根据父节点查询子节点数据
-     * @param menuId
-     * @return
+     * 根据父节点查询子节点数据 <br/>
+     * @param menuId <br/>
+     * @return 子节点
      */
     @GetMapping("/{menuId}")
     public Result getChildren(@PathVariable Long menuId){
@@ -55,9 +55,9 @@ public class TreeMenuController {
     }
 
     /**
-     * 根据名称查询
-     * @param menuName
-     * @return
+     * 根据名称查询 <br/>
+     * @param menuName <br/>
+     * @return 菜单树
      */
     @GetMapping("/search/{menuName}")
     public Result searchMenus(@PathVariable String menuName){
@@ -66,9 +66,9 @@ public class TreeMenuController {
     }
 
     /**
-     * 判断是否是叶子节点
-     * @param menuId
-     * @return
+     * 判断是否是叶子节点 <br/>
+     * @param menuId <br/>
+     * @return 是否
      */
     public Boolean isLeaf(Long menuId) {
         List<TreeMenu> children =treeMenuMapper.getChildren(menuId);
@@ -78,14 +78,12 @@ public class TreeMenuController {
         return false;
     }
     /**
-     * 搜素查询
-     *
+     * 搜素查询 <br/>
      * 相当于模糊查询。与之前在xml里实现的模糊查询相比，
      * 不单单查的是包含关键字的字段，它能将包含关键字的
      * 父节点也返回，能够以一棵树的形式返回
-     *
-     * @param menuName
-     * @return
+     * @param menuName <br/>
+     * @return 菜单树
      */
   public List<TreeMenu> searchItems(String menuName) {
         // 先查询出所有的数据
@@ -117,11 +115,9 @@ public class TreeMenuController {
         return buildTree(menusAfterSearched);
     }
     /**
-     * 构建树形结构
-     *
-     * 参照Cascader 级联选择器
+     * 构建树形结构 <br/>
+     * 参照 Cascader 级联选择器 <br/>
      * @param list
-     * @return
      */
     public static List<TreeMenu> buildTree(List<TreeMenu> list){
         // 获取parentId = 0 的节点
@@ -148,9 +144,9 @@ public class TreeMenuController {
     }
 
     /**
-     *  递归遍历节点
-     * @param list
-     * @param map
+     * 递归遍历节点 <br/>
+     * @param list <br/>
+     * @param map 节点叔祖
      */
     public static void recursionFnTree(List<TreeMenu> list, Map<Long,List<TreeMenu>> map) {
         for (TreeMenu menu : list) {
