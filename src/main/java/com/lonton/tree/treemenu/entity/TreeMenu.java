@@ -7,9 +7,8 @@ import java.util.List;
 
 /**
  * (TreeMenu)实体类
- *
+ * <p/>
  * @author 张利红
- * date:2022-11-09
  */
 @Data
 public class TreeMenu implements Serializable {
