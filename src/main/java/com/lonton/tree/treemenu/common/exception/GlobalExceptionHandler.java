@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * 全局异常处理类
+ * <p/>
  * @author 张利红
  */
 @Slf4j
@@ -15,9 +16,8 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * 处理 Exception 异常
-     *
-     * @param e 异常
+     * 处理 Exception 异常<br/>
+     * @param e 异常<br/>
      * @return 处理结果
      */
     @ExceptionHandler(Exception.class)
@@ -27,9 +27,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 处理空指针异常
-     *
-     * @param e 异常
+     * 处理空指针异常<br/>
+     * @param e 异常<br/>
      * @return 处理结果
      */
     @ExceptionHandler(NullPointerException.class)
@@ -39,9 +38,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 处理自定义异常
-     *
-     * @param e 异常
+     * 处理自定义异常<br/>
+     * @param e 异常<br/>
      * @return 处理结果
      */
     @ExceptionHandler(GlobalException.class)

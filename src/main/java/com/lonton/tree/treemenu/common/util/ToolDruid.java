@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 /**
  * 数据库连接池工具类
+ * <p/>
  * @author 张利红
  */
 public class ToolDruid {

@@ -5,7 +5,9 @@ import org.apache.http.HttpStatus;
 
 /**
  * 自定义异常类
+ * <p/>
  * 可以自定义 异常信息 message 以及 响应状态码 code（默认为 500）。
+ * <p/>
  * @author 张利红
  */
 @Data
@@ -21,7 +23,7 @@ public class GlobalException extends RuntimeException {
     private Integer code = HttpStatus.SC_INTERNAL_SERVER_ERROR;
 
     /**
-     * 默认构造方法，根据异常信息 构建一个异常实例对象
+     * 默认构造方法，根据异常信息 构建一个异常实例对象<br/>
      * @param message 异常信息
      */
     public GlobalException(String message) {
@@ -30,8 +32,8 @@ public class GlobalException extends RuntimeException {
     }
 
     /**
-     * 根据异常信息、响应状态码构建 一个异常实例对象
-     * @param message 异常信息
+     * 根据异常信息、响应状态码构建 一个异常实例对象<br/>
+     * @param message 异常信息<br/>
      * @param code 响应状态码
      */
     public GlobalException(String message, Integer code) {
@@ -41,8 +43,8 @@ public class GlobalException extends RuntimeException {
     }
 
     /**
-     * 根据异常信息，异常对象构建 一个异常实例对象
-     * @param message 异常信息
+     * 根据异常信息，异常对象构建 一个异常实例对象<br/>
+     * @param message 异常信息<br/>
      * @param e 异常对象
      */
     public GlobalException(String message, Throwable e) {
@@ -51,9 +53,9 @@ public class GlobalException extends RuntimeException {
     }
 
     /**
-     * 根据异常信息，响应状态码，异常对象构建 一个异常实例对象
-     * @param message 异常信息
-     * @param code 响应状态码
+     * 根据异常信息，响应状态码，异常对象构建 一个异常实例对象<br/>
+     * @param message 异常信息<br/>
+     * @param code 响应状态码<br/>
      * @param e 异常对象
      */
     public GlobalException(String message, Integer code, Throwable e) {

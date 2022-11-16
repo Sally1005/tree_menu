@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 统一结果返回类。方法采用链式调用的写法（即返回类本身 return this）。
+ * 统一结果返回类。方法采用链式调用的写法（即返回类本身 return this）<p/>
  * @author 张利红
  */
 @Data
@@ -38,9 +38,9 @@ public class Result {
         private Result(){}
 
         /**
-         * 私有自定义构造器
-         * @param success 响应是否成功
-         * @param code 响应状态码
+         * 私有自定义构造器<br/>
+         * @param success 响应是否成功<br/>
+         * @param code 响应状态码<br/>
          * @param message 响应消息
          */
         private Result(Boolean success, Integer code, String message){
@@ -50,7 +50,7 @@ public class Result {
         }
 
         /**
-         * 返回一个默认的 成功操作 的结果，默认响应状态码 200
+         * 返回一个默认的 成功操作 的结果，默认响应状态码 200<br/>
          * @return 成功操作的实例对象
          */
         public static Result ok() {
@@ -58,10 +58,10 @@ public class Result {
         }
 
         /**
-         * 返回一个自定义 成功操作 的结果
-         * @param success 响应是否成功
-         * @param code 响应状态码
-         * @param message 响应消息
+         * 返回一个自定义 成功操作 的结果<br/>
+         * @param success 响应是否成功<br/>
+         * @param code 响应状态码<br/>
+         * @param message 响应消息<br/>
          * @return 成功操作的实例对象
          */
         public static Result ok(Boolean success, Integer code, String message) {
@@ -69,7 +69,7 @@ public class Result {
         }
 
         /**
-         * 返回一个默认的 失败操作 的结果，默认响应状态码为 500
+         * 返回一个默认的 失败操作 的结果，默认响应状态码为 500<br/>
          * @return 失败操作的实例对象
          */
         public static Result error() {
@@ -77,10 +77,10 @@ public class Result {
         }
 
         /**
-         * 返回一个自定义 失败操作 的结果
-         * @param success 响应是否成功
-         * @param code 响应状态码
-         * @param message 相应消息
+         * 返回一个自定义 失败操作 的结果<br/>
+         * @param success 响应是否成功<br/>
+         * @param code 响应状态码<br/>
+         * @param message 相应消息<br/>
          * @return 失败操作的实例对象
          */
         public static Result error(Boolean success, Integer code, String message) {
@@ -88,8 +88,8 @@ public class Result {
         }
 
         /**
-         * 自定义响应是否成功
-         * @param success 响应是否成功
+         * 自定义响应是否成功<br/>
+         * @param success 响应是否成功<br/>
          * @return 当前实例对象
          */
         public Result success(Boolean success) {
@@ -98,8 +98,8 @@ public class Result {
         }
 
         /**
-         * 自定义响应状态码
-         * @param code 响应状态码
+         * 自定义响应状态码<br/>
+         * @param code 响应状态码<br/>
          * @return 当前实例对象
          */
         public Result code(Integer code) {
@@ -108,8 +108,8 @@ public class Result {
         }
 
         /**
-         * 自定义响应消息
-         * @param message 响应消息
+         * 自定义响应消息<br/>
+         * @param message 响应消息<br/>
          * @return 当前实例对象
          */
         public Result message(String message) {
@@ -118,8 +118,8 @@ public class Result {
         }
 
         /**
-         * 自定义响应数据，一次设置一个 map 集合
-         * @param map 响应数据
+         * 自定义响应数据，一次设置一个 map 集合<br/>
+         * @param map 响应数据<br/>
          * @return 当前实例对象
          */
         public Result data(Map<String, Object> map) {
@@ -128,9 +128,9 @@ public class Result {
         }
 
         /**
-         * 通用设置响应数据，一次设置一个 key - value 键值对
-         * @param key 键
-         * @param value 数据
+         * 通用设置响应数据，一次设置一个 key - value 键值对<br/>
+         * @param key 键<br/>
+         * @param value 数据<br/>
          * @return 当前实例对象
          */
         public Result data(String key, Object value) {
