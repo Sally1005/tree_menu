@@ -43,9 +43,7 @@
 4. 能够正常启动项目后，将assets下的sql文件拿到，在数据库中建表；
 5. 打开 http://localhost:8080/treeMenu/ 可以查看父级菜单id为0的数据，如下图：
 <br/>
-![父级菜单id为0](https://github.com/Sally1005/treemenu-web/blob/master/.README_images/%E7%88%B6%E7%BA%A7%E8%8F%9C%E5%8D%95%E4%B8%BA0%E6%95%B0%E6%8D%AE.png) 
-   打开 http://localhost:8080/treeMenu/2/　（２为任意非叶子节点id，具体数据可参考数据库）如下图：
-   <br/>
-![非叶子节点id](https://github.com/Sally1005/treemenu-web/blob/master/.README_images/%E9%9D%9E%E5%8F%B6%E5%AD%90%E8%8A%82%E7%82%B9.png)
+![](https://github.com/Sally1005/treemenu-web/blob/master/.README_images/%E7%88%B6%E7%BA%A7%E8%8F%9C%E5%8D%95%E4%B8%BA0%E6%95%B0%E6%8D%AE.png) 
+
 
 
