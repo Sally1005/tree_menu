@@ -17,8 +17,9 @@ CREATE TABLE `tree_menu` (
 
 /*Data for the table `tree_menu` */
 
-start transaction
-savepoint a
+start transaction;
+savepoint a;
+/*插入数据*/
 insert  into `tree_menu`(`menu_id`,`menu_name`,`parent_menu_id`,`menu_level`,`menu_sort`) values
 (1,'月度',0,1,0),
 (2,'价格',1,2,0),
@@ -152,9 +153,9 @@ insert  into `tree_menu`(`menu_id`,`menu_name`,`parent_menu_id`,`menu_level`,`me
 (130,'香港特别行政区主要社会经济指标',100,2,0),
 (131,'澳门特别行政区主要社会经济指标',100,2,0),
 (132,'台湾省主要社会经济指标',100,2,0);
-savepoint b
+savepoint b;
 insert into `tree_menu`(`menu_id`,`menu_name`) values
 (133,'基础服务基本情况'),
 (134,'毕业生就业情况');
-rollback to b
+rollback to b;
 commit
