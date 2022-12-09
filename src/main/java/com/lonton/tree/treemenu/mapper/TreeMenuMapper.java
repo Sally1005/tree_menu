@@ -1,6 +1,6 @@
 package com.lonton.tree.treemenu.mapper;
 
-import com.lonton.tree.treemenu.entity.TreeMenu;
+import com.lonton.tree.treemenu.pojo.entity.TreeMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

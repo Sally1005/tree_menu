@@ -1,7 +1,7 @@
 package com.lonton.tree.treemenu.controller;
 
 import com.lonton.tree.treemenu.common.util.Result;
-import com.lonton.tree.treemenu.entity.TreeMenu;
+import com.lonton.tree.treemenu.pojo.entity.TreeMenu;
 import com.lonton.tree.treemenu.mapper.TreeMenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
