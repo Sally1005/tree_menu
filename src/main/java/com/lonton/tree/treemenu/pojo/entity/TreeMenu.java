@@ -1,4 +1,4 @@
-package com.lonton.tree.treemenu.entity;
+package com.lonton.tree.treemenu.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
