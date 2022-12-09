@@ -1,0 +1,21 @@
+# 服务器端配置
+server:
+  # 服务端口
+  port: 8080
+
+# Spring配置
+spring:
+  # 数据源配置
+  datasource:
+    # 连接数据库的URL
+    url: jdbc:mysql://localhost:3306/tree?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    # 连接数据库的用户名
+    username: root
+    # 连接数据库的密码
+    password: root
+
+# 日志
+logging:
+  # 日志的显示级别
+  level:
+   com.lonton.tree.treemenu: debug
