@@ -14,8 +14,8 @@ import org.springframework.transaction.interceptor.NameMatchTransactionAttribute
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /**
- * @ClassName TransactionConfig
- * 事务管理配置，拦截controller包下所有方法
+ * TransactionConfig
+ * 事务管理配置，拦截controller包下方法
  * @author 张利红
  */
 @Aspect
@@ -36,8 +36,6 @@ public class TransactionConfig {
 
     /**
      * 事务配置
-     *
-     * @return
      */
     @Bean
     public TransactionInterceptor txAdvice() {
@@ -80,7 +78,7 @@ public class TransactionConfig {
 
     /**
      * 利用AspectJExpressionPointcut设置切面=切点+通知（写成内部bean的方式）
-     *
+     * <br/>
      * @return
      */
     @Bean
