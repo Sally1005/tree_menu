@@ -1,25 +1,27 @@
 /* 创建数据库tree,在库中创建tree_menu数据库表 */
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`tree` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
+CREATE DATABASE IF NOT EXISTS `tree` ;
 USE `tree`;
-/*Table structure for table `tree_menu` */
-
+-- ----------------------------
+-- Table structure for tree_menu
+-- ----------------------------
 DROP TABLE IF EXISTS `tree_menu`;
-
 CREATE TABLE `tree_menu` (
   `menu_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '当前菜单ID',
   `menu_name` varchar(255) DEFAULT NULL COMMENT '菜单名',
   `parent_menu_id` bigint(20) DEFAULT NULL COMMENT '当前菜单的父菜单ID',
   `menu_level` int(11) DEFAULT NULL COMMENT '当前菜单的层级',
-  `sort` int(11) DEFAULT NULL COMMENT '排序',
+  `menu_sort` int(11) DEFAULT NULL COMMENT '排序',
+  `gmt_create` DATETIME DEFAULT NULL COMMENT '数据创建时间',
+  `gmt_modified` DATETIME DEFAULT NULL COMMENT '数据最后修改时间',
+  `is_delete` tinyint(4) DEFAULT '0' COMMENT '是否删除  -1：已删除  0：正常',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `tree_menu` */
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 start transaction;
 savepoint a;
-/*插入数据*/
+-- ----------------------------
+-- Records of tree_menu
+-- ----------------------------
 insert  into `tree_menu`(`menu_id`,`menu_name`,`parent_menu_id`,`menu_level`,`menu_sort`) values
 (1,'月度',0,1,0),
 (2,'价格',1,2,0),
