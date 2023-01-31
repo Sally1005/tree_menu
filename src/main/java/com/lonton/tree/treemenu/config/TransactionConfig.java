@@ -1,4 +1,4 @@
-package com.lonton.tree.treemenu.common.util;
+package com.lonton.tree.treemenu.config;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;
