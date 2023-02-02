@@ -1,8 +1,9 @@
-package com.lonton.tree.treemenu.pojo.entity;
+package com.lonton.tree.treemenu.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  */
 @Data
 public class TreeMenu implements Serializable {
-    private static final long serialVersionUID = -27923712765212107L;
+    private static final long serialVersionUID = 1L;
     /**
      * 当前菜单ID
      */
@@ -43,6 +44,21 @@ public class TreeMenu implements Serializable {
      */
     @TableField(exist = false)
     private Boolean isLeaf = false;
+
+    /**
+     * 数据创建时间
+     */
+    private LocalDateTime gmtCreate;
+
+    /**
+     * 数据最后修改时间
+     */
+    private LocalDateTime gmtModified;
+
+    /**
+     * 是否删除  -1：已删除  0：正常
+     */
+    private Integer isDelete;
 
 }
 
