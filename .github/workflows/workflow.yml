@@ -29,7 +29,7 @@ jobs:
       DB_DATABASE: ${{secrets.DB_DATABASE}}
       DB_USER: ${{secrets.DB_USER}}
       MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
-      JAVA_HOME_1.8_X64: ${{secrets.JAVA_HOME_1.8_X64}}
+      JAVA_HOME_8_X64: ${{secrets.JAVA_HOME_8_X64}}
 
     # 执行步骤
     steps:
@@ -59,7 +59,7 @@ jobs:
         id: cache-jdk
         uses: actions/cache@v3
         with:
-          path: ${{ env.JAVA_HOME_1.8_X64 }}
+          path: ${{ env.JAVA_HOME_8_X64 }}
           key: ${{ runner.os }}-jdk-1.8
           restore-keys: ${{ runner.os }}-jdk-
 
