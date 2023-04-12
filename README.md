@@ -1,3 +1,5 @@
+# treemenu-web [![Junit](https://github.com/Sally1005/treemenu-web/actions/workflows/workflow.yml/badge.svg?event=push)](https://github.com/Sally1005/treemenu-web/actions/workflows/workflow.yml)
+
 # 项目介绍
 
 该工程的主要目的是练习如何制作树形菜单。前后端分离，前端项目名为treemenu-ui，后端的项目名为treemenu-web。目前已实现的功能有将数据存储在数据库中，模糊查询树的所有内容。在后续的学习中，会慢慢补充新的功能。
