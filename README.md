@@ -1,5 +1,4 @@
-# treemenu-web [![Junit](https://github.com/Sally1005/treemenu-web/actions/workflows/workflow.yml/badge.svg)](https://github.com/Sally1005/treemenu-web/actions/workflows/workflow.yml)
-
+# treemenu-web [![Junit](https://github.com/Sally1005/treemenu-web/actions/workflows/workflow.yml/badge.svg)](https://github.com/Sally1005/treemenu-web/actions/workflows/workflow.yml) [![codecov](https://codecov.io/gh/Sally1005/treemenu-web/graph/badge.svg)](https://codecov.io/gh/Sally1005/treemenu-web)
 
 # 项目介绍
 
