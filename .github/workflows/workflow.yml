@@ -29,7 +29,7 @@ jobs:
       DB_DATABASE: ${{secrets.DB_DATABASE}}
       DB_USER: ${{secrets.DB_USER}}
       MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
-      JAVA_HOME_17_X64: ${{secrets.JAVA_HOME_17_X64}}
+      JAVA_HOME_1.8_X64: ${{secrets.JAVA_HOME_1.8_X64}}
 
     # 执行步骤
     steps:
@@ -59,8 +59,8 @@ jobs:
         id: cache-jdk
         uses: actions/cache@v3
         with:
-          path: ${{ env.JAVA_HOME_17_X64 }}
-          key: ${{ runner.os }}-jdk-17
+          path: ${{ env.JAVA_HOME_1.8_X64 }}
+          key: ${{ runner.os }}-jdk-1.8
           restore-keys: ${{ runner.os }}-jdk-
 
         # 缓存  MySQL及 脚本，以便在下次重启 workflow 时，加快 workflow 的执行速度
