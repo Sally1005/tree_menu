@@ -2,6 +2,7 @@ package com.lonton.tree.treemenu.mapper;
 
 import com.lonton.tree.treemenu.pojo.TreeMenu;
 import org.apache.ibatis.annotations.Mapper;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +41,10 @@ public interface TreeMenuMapper {
      * @return 是否
      */
     Boolean isLeaf(Long menuId);
+
+    List<TreeMenu> buildTree();
+
+    List<TreeMenu> searchItems(@Param("name")String name);
+
 }
 

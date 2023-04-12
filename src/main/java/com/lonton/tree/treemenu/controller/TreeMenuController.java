@@ -5,7 +5,11 @@ import com.lonton.tree.treemenu.pojo.TreeMenu;
 import com.lonton.tree.treemenu.mapper.TreeMenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.*;
 
@@ -21,6 +25,7 @@ import java.util.*;
 public class TreeMenuController {
 
     @Autowired
+
     TreeMenuMapper treeMenuMapper;
 
     /**
@@ -87,13 +92,58 @@ public class TreeMenuController {
      * 不单单查的是包含关键字的字段，它能将包含关键字的
      * 父节点也返回，能够以一棵树的形式返回
      *
-     * @param
+     * @param name 菜单名
      * @return 菜单树
      */
     // 根据包含的菜单名称关键字，类似于模糊查询，将包含关键字的菜单以一棵树返回
-    public List<TreeMenu> searchItems(String menuName) {
-        // 先查询出所有的数据
-        List<TreeMenu> allMenus = treeMenuMapper.getAllTreeMenu();
+    public List<TreeMenu> searchItems(String name) {
+//        // 结果集
+//        List<TreeMenu> resultTreeSet = new ArrayList<>();
+//        Set<TreeMenu> parentSet = new HashSet<>();
+//        Set<TreeMenu> rootSet = new HashSet<>();
+//
+//        List<TreeMenu> menuList = treeMenuMapper.searchItems(name);
+//        for (TreeMenu menu : menuList) {
+//// 如果该菜单已经在结果集中出现过，则跳过本次循环
+//            if (resultTreeSet.contains(menu)) {
+//                continue;
+//            }
+//
+//// 遍历该菜单和其所有父级菜单，并将它们加入结果集和 parentSet
+//            TreeMenu current = menu;
+//            while (current.getParentMenuId() != null) {
+//// 如果该菜单还有父级菜单，则继续向上查找
+//                boolean foundParent = false;
+//// 遍历所有菜单项，找到当前菜单项的父级菜单
+//                for (TreeMenu parent : menuList) {
+//                    if (current.getParentMenuId().equals(parent.getMenuId())) {
+//                        resultTreeSet.add(parent);
+//                        parentSet.add(parent);
+//                        current = parent;
+//                        foundParent = true;
+//                        break;
+//                    }
+//                }
+//                if (!foundParent) { // 如果没有找到当前菜单项的父级菜单，则跳出循环
+//                    break;
+//                }
+//            }
+//
+//// 将菜单项本身加入结果集和 parentSet
+//            resultTreeSet.add(menu);
+//            parentSet.add(menu);
+//        }
+//
+//// 遍历 resultTreeSet 集合，将没有父节点的节点作为根节点提取出来
+//        for (TreeMenu menu : resultTreeSet) {
+//            if (menu.getParentMenuId() == null) { // 如果当前菜单项没有父节点，则将它作为根节点
+//                rootSet.add(menu);
+//            }
+//        }
+//
+//        return buildTree(resultTreeSet);
+//    }
+        List<TreeMenu> allMenus = treeMenuMapper.searchItems(name);
         Map<Long, TreeMenu> menuMap = new HashMap<>();
         for (TreeMenu menu : allMenus) {
             menuMap.put(menu.getMenuId(), menu);
@@ -101,7 +151,7 @@ public class TreeMenuController {
         // 再在查询出所有的数据中进行搜索过滤
         List<TreeMenu> menusAfterSearched = new ArrayList<>();
         for (TreeMenu menu : allMenus) {
-            if (menu.getMenuName().contains(menuName)) {
+            if (menu.getMenuName().contains(name)) {
                 if (!menusAfterSearched.contains(menu)) {
                     menusAfterSearched.add(menu);
                 }
@@ -109,7 +159,6 @@ public class TreeMenuController {
                 Long parentId = menu.getParentMenuId();
                 while (parentId != 0) {
                     TreeMenu treeMenu = menuMap.get(parentId);
-
                     if (!menusAfterSearched.contains(treeMenu)) {
                         menusAfterSearched.add(treeMenu);
                     }
@@ -117,27 +166,22 @@ public class TreeMenuController {
                 }
             }
         }
-        return buildTree(menusAfterSearched);
+        return buildTree();
     }
 
 
     /**
      * 构建树形菜单
      *
-     * @param list 节点集
      * @return 树形菜单
      */
-    public static List<TreeMenu> buildTree(List<TreeMenu> list) {
-        // 将数据按照菜单等级排序
-        Collections.sort(list, Comparator.comparingInt(TreeMenu::getMenuLevel));
-        // 将节点按照菜单id放置到map中
-        Map<Long, TreeMenu> map = new HashMap<>();
-        for (TreeMenu menu : list) { // iter
-            map.put(menu.getMenuId(), menu);
-        }
-        // 循环处理每个节点，将每个节点挂在其父节点上
+    public List<TreeMenu> buildTree() {
+        List<TreeMenu> menus = treeMenuMapper.buildTree();
         List<TreeMenu> rootList = new ArrayList<>();
-        for (TreeMenu menu : list) {
+        Map<Long, TreeMenu> map = new HashMap<>();
+        // 遍历查询结果，组装父子节点关系
+        for (TreeMenu menu : menus) {
+            map.put(menu.getMenuId(), menu);
             // 第一级节点作为根节点
             if (menu.getMenuLevel() == 1) {
                 rootList.add(menu);
@@ -152,10 +196,47 @@ public class TreeMenuController {
                         parentMenu.setChildren(children);
                     }
                     children.add(menu);
+                } else { // 如果找不到父节点，则抛出异常
+                    throw new RuntimeException("Parent menu not found: parentId = " + menu.getParentMenuId());
                 }
             }
         }
+        // 返回结果
         return rootList;
     }
+
+//        // 将数据按照菜单等级排序
+//        Collections.sort(list, Comparator.comparingInt(TreeMenu::getMenuLevel));
+//        // 将节点按照菜单id放置到map中
+//        Map<Long, TreeMenu> map = new HashMap<>();
+//        for (TreeMenu menu : list) { // iter
+//            map.put(menu.getMenuId(), menu);
+//        }
+//        // 循环处理每个节点，将每个节点挂在其父节点上
+//        List<TreeMenu> rootList = new ArrayList<>();
+//        for (TreeMenu menu : list) {
+//            // 第一级节点作为根节点
+//            if (menu.getMenuLevel() == 1) {
+//                rootList.add(menu);
+//                // 非根节点挂在其父节点下
+//            } else {
+//                Long parentId = menu.getParentMenuId();
+//                TreeMenu parentMenu = map.get(parentId);
+//                if (parentMenu != null) {
+//                    List<TreeMenu> children = parentMenu.getChildren();
+//                    if (children == null) {
+//                        children = new ArrayList<>();
+//                        parentMenu.setChildren(children);
+//                    }
+//                    children.add(menu);
+//                } else {
+//                    // 兜底处理，抛出异常
+//                    throw new RuntimeException("Parent menu not found: parentId = " + parentId);
+//                }
+//            }
+//
+//        }
+//        return rootList;
+//    }
 }
 

@@ -2,6 +2,8 @@ package com.lonton.tree.treemenu.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
  * @author 张利红
  */
 @Data
+@Accessors(chain = true)
 public class TreeMenu implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
@@ -30,10 +33,7 @@ public class TreeMenu implements Serializable {
      * 当前菜单的层级
      */
     private Integer menuLevel;
-    /**
-     * 排序
-     */
-    private Integer menuSort;
+
     /**
      * 用于保存一个菜单的子菜单
      */

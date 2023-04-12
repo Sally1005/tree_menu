@@ -1,6 +1,6 @@
 package com.lonton.tree.treemenu;
 
-import com.lonton.tree.treemenu.pojo.entity.TreeMenu;
+import com.lonton.tree.treemenu.pojo.TreeMenu;
 import com.lonton.tree.treemenu.mapper.TreeMenuMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
