@@ -1,0 +1,105 @@
+#/**
+# * workflow.yml (工作流-GitHub Actions 自动托管代码,代码每次从本地 push到仓库时都会自动执行测试用例)
+# *
+# * @author 张利红
+# */
+
+# workflow 的名称，会在 GitHub Action 页面上显示的名称
+name: Junit
+
+# 代码只有在 push到 main 分支上才会此 workflow
+on:
+  push:
+    branches: [ main ]
+    # 仅在以下文件修改时才触发，减少每次细微修改 push 后在运行器上的周期浪费
+  #  paths: [ '**.java', '.github/workflows/build.yml', 'pom.xml' ]
+  # 人工触发
+  workflow_dispatch:
+
+# 创建一个job
+jobs:
+  # 将此 job 的名称设定为 'build'
+  build:
+    # 执行在最新版本的 ubuntu runner 上
+    runs-on: ubuntu-latest
+    # 设定系统上的环境变量，包含连接数据库的设定 (例如 MySQL)
+    # 较为私密的信息可以存放在 GitHub Action 的 secrets
+    # 在 yml 文档中可以使用 ${{ secrets.SECRET_NAME }} 取得 secrets 中存放的值
+    env:
+      DB_DATABASE: ${{secrets.DB_DATABASE}}
+      DB_USER: ${{secrets.DB_USER}}
+      MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
+      JAVA_HOME_17_X64: ${{secrets.JAVA_HOME_17_X64}}
+
+    # 执行步骤
+    steps:
+      # 使用 actions/checkout@v3 这个官方的 action
+      # 可以查看 workflow 的执行状况，并对 workflow 的虚拟环境进行指令操作（例如测试环境）
+      - name: check out code
+        uses: actions/checkout@v3
+
+      # 设立时区
+      - name: Set timezone to Shanghai
+        run: |
+          sudo rm /etc/localtime
+          sudo ln -s /usr/share/zoneinfo/Asia/Shanghai/etc/localtime
+
+      # 缓存 Maven，以便在下次重启 workflow 时，加快 workflow 的执行速度
+      - name: Cache local Maven repository
+        id: cache-maven
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # 缓存 JDK，以便在下次重启 workflow 时，加快 workflow 的执行速度
+      - name: Cache JDK
+        id: cache-jdk
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.JAVA_HOME_17_X64 }}
+          key: ${{ runner.os }}-jdk-17
+          restore-keys: ${{ runner.os }}-jdk-
+
+        # 缓存  MySQL及 脚本，以便在下次重启 workflow 时，加快 workflow 的执行速度
+      - name: Cache MySQL and SQL scripts
+        id: cache-mysql-scripts
+        uses: actions/cache@v2
+        with:
+          path: /usr/local/mysql/data
+          key: ${{ runner.os }}-mysql-scripts-${{ hashFiles('**/*.sql') }}
+          restore-keys: |
+            ${{ runner.os }}-mysql-scripts-
+            Linux-mysql-scripts-
+
+        # 模拟连接数据库
+      - name: Modify MySQL Connection Variables
+        run: |
+           sudo service mysql start       
+           mysql -uroot -proot -e "create user 'Tom'@'localhost' identified by 'root';grant all privileges on tree.tree_menu to 'Tom'@'localhost';FLUSH PRIVILEGES; ALTER USER 'Tom'@'localhost' IDENTIFIED BY 'root';create database tree;"   
+           mysql -uroot -proot -Dtree < ${GITHUB_WORKSPACE}/assets/database/tree_menu.sql
+
+      # 使用Github Action市场提供的Junit流程来执行单元测试，并且输出报告
+      - name: Run Unit Tests
+        run: mvn -B test --file pom.xml
+      - uses: ashley-taylor/junit-report-annotations-action@master
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+
+
+      # 下载jacoco测试覆盖率报告
+      - name: Download Jacoco Report
+        run: |
+          curl -LJO "https://raw.githubusercontent.com/${{ github.repository }}/target/site/jacoco/jacoco.xml"
+
+      # 将报告上传至Codecov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./target/site/jacoco/jacoco.xml
+
+
