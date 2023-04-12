@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">treemenu</a> &gt; <a href="index.source.html" class="el_package">com.lonton.tree.treemenu.common.exception</a> &gt; <span class="el_source">GlobalException.java</span></div><h1>GlobalException.java</h1><pre class="source lang-java linenums">package com.lonton.tree.treemenu.common.exception;
+
+import lombok.Data;
+import org.apache.http.HttpStatus;
+
+/**
+ * 自定义异常类
+ * &lt;p/&gt;
+ * 可以自定义 异常信息 message 以及 响应状态码 code（默认为 500）。
+ * &lt;p/&gt;
+ * @author 张利红
+ */
+<span class="nc bnc" id="L13" title="All 22 branches missed.">@Data</span>
+public class GlobalException extends RuntimeException {
+    /**
+     * 保存异常信息
+     */
+<span class="nc" id="L18">    private String message;</span>
+
+    /**
+     * 保存响应状态码
+     */
+<span class="nc" id="L23">    private Integer code = HttpStatus.SC_INTERNAL_SERVER_ERROR;</span>
+
+    /**
+     * 默认构造方法，根据异常信息 构建一个异常实例对象&lt;br/&gt;
+     * @param message 异常信息
+     */
+    public GlobalException(String message) {
+<span class="nc" id="L30">        super(message);</span>
+<span class="nc" id="L31">        this.message = message;</span>
+<span class="nc" id="L32">    }</span>
+
+    /**
+     * 根据异常信息、响应状态码构建 一个异常实例对象&lt;br/&gt;
+     * @param message 异常信息&lt;br/&gt;
+     * @param code 响应状态码
+     */
+    public GlobalException(String message, Integer code) {
+<span class="nc" id="L40">        super(message);</span>
+<span class="nc" id="L41">        this.message = message;</span>
+<span class="nc" id="L42">        this.code = code;</span>
+<span class="nc" id="L43">    }</span>
+
+    /**
+     * 根据异常信息，异常对象构建 一个异常实例对象&lt;br/&gt;
+     * @param message 异常信息&lt;br/&gt;
+     * @param e 异常对象
+     */
+    public GlobalException(String message, Throwable e) {
+<span class="nc" id="L51">        super(message, e);</span>
+<span class="nc" id="L52">        this.message = message;</span>
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * 根据异常信息，响应状态码，异常对象构建 一个异常实例对象&lt;br/&gt;
+     * @param message 异常信息&lt;br/&gt;
+     * @param code 响应状态码&lt;br/&gt;
+     * @param e 异常对象
+     */
+    public GlobalException(String message, Integer code, Throwable e) {
+<span class="nc" id="L62">        super(message, e);</span>
+<span class="nc" id="L63">        this.message = message;</span>
+<span class="nc" id="L64">        this.code = code;</span>
+<span class="nc" id="L65">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

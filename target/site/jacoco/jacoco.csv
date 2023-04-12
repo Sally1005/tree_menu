@@ -1,0 +1,15 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+treemenu,com.lonton.tree.treemenu.common.util,Result,295,0,38,0,25,0,42,0,23,0
+treemenu,com.lonton.tree.treemenu.common.util,LogAspect,46,7,0,0,10,3,2,2,2,2
+treemenu,com.lonton.tree.treemenu.common.util,LogAspect.content,52,0,0,0,8,0,2,0,2,0
+treemenu,com.lonton.tree.treemenu.config,SwaggerConfig,0,38,0,0,0,13,0,3,0,3
+treemenu,com.lonton.tree.treemenu.config,TransactionConfig,0,56,0,0,0,14,0,3,0,3
+treemenu,com.lonton.tree.treemenu.pojo,TreeUserRole,255,0,46,0,6,0,38,0,15,0
+treemenu,com.lonton.tree.treemenu.pojo,TreeUser,524,0,94,0,12,0,74,0,27,0
+treemenu,com.lonton.tree.treemenu.pojo,TreeRole,255,0,46,0,6,0,38,0,15,0
+treemenu,com.lonton.tree.treemenu.pojo,TreeMenuRole,255,0,46,0,6,0,38,0,15,0
+treemenu,com.lonton.tree.treemenu.pojo,TreeMenu,334,106,78,0,0,11,47,15,8,15
+treemenu,com.lonton.tree.treemenu.controller,TreeMenuController,246,3,26,0,56,1,19,1,6,1
+treemenu,com.lonton.tree.treemenu.common.exception,GlobalExceptionHandler,31,7,0,0,6,2,3,2,3,2
+treemenu,com.lonton.tree.treemenu.common.exception,GlobalException,175,0,22,0,17,0,23,0,12,0
+treemenu,com.lonton.tree.treemenu,TreeMenuApplication,5,3,0,0,2,1,1,1,1,1

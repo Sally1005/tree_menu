@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TreeMenu.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">treemenu</a> &gt; <a href="index.source.html" class="el_package">com.lonton.tree.treemenu.pojo</a> &gt; <span class="el_source">TreeMenu.java</span></div><h1>TreeMenu.java</h1><pre class="source lang-java linenums">package com.lonton.tree.treemenu.pojo;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * (TreeMenu)实体类
+ * &lt;p/&gt;
+ * @author 张利红
+ */
+<span class="pc bnc" id="L16" title="All 78 branches missed.">@Data</span>
+@Accessors(chain = true)
+public class TreeMenu implements Serializable {
+    private static final long serialVersionUID = 1L;
+    /**
+     * 当前菜单ID
+     */
+<span class="fc" id="L23">    private Long menuId;</span>
+    /**
+     * 菜单名
+     */
+<span class="fc" id="L27">    private String menuName;</span>
+    /**
+     * 当前菜单的父菜单ID
+     */
+<span class="fc" id="L31">    private Long parentMenuId;</span>
+    /**
+     * 当前菜单的层级
+     */
+<span class="fc" id="L35">    private Integer menuLevel;</span>
+
+    /**
+     * 用于保存一个菜单的子菜单
+     */
+    @TableField(exist = false)
+<span class="fc" id="L41">    private List&lt;TreeMenu&gt; children;</span>
+    /**
+     * 判断是否为叶子节点
+     */
+<span class="fc" id="L45">    @TableField(exist = false)</span>
+<span class="fc" id="L46">    private Boolean isLeaf = false;</span>
+
+    /**
+     * 数据创建时间
+     */
+<span class="fc" id="L51">    private LocalDateTime gmtCreate;</span>
+
+    /**
+     * 数据最后修改时间
+     */
+<span class="fc" id="L56">    private LocalDateTime gmtModified;</span>
+
+    /**
+     * 是否删除  -1：已删除  0：正常
+     */
+<span class="fc" id="L61">    private Integer isDelete;</span>
+
+}
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TreeMenuController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">treemenu</a> &gt; <a href="index.source.html" class="el_package">com.lonton.tree.treemenu.controller</a> &gt; <span class="el_source">TreeMenuController.java</span></div><h1>TreeMenuController.java</h1><pre class="source lang-java linenums">package com.lonton.tree.treemenu.controller;
+
+import com.lonton.tree.treemenu.common.util.Result;
+import com.lonton.tree.treemenu.pojo.TreeMenu;
+import com.lonton.tree.treemenu.mapper.TreeMenuMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+import java.util.*;
+
+
+/**
+ * (TreeMenu)表控制层
+ * &lt;p/&gt;
+ *
+ * @author 张利红
+ */
+@RestController
+@RequestMapping(value = {&quot;treeMenu&quot;, &quot;lazyTreeMenu&quot;})
+<span class="fc" id="L25">public class TreeMenuController {</span>
+
+    @Autowired
+
+    TreeMenuMapper treeMenuMapper;
+
+    /**
+     * 获取根节点菜单 &lt;br/&gt;
+     *
+     * @return 根节点菜单
+     */
+    @GetMapping(&quot;&quot;)
+    public Result getRootMenus() {
+<span class="nc" id="L38">        List&lt;TreeMenu&gt; menus = treeMenuMapper.getRootMenus();</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        for (TreeMenu menu : menus) {</span>
+<span class="nc" id="L40">            Boolean leaf = isLeaf(menu.getMenuId());</span>
+<span class="nc" id="L41">            menu.setIsLeaf(leaf);</span>
+<span class="nc" id="L42">        }</span>
+<span class="nc" id="L43">        return Result.ok().data(&quot;menus&quot;, menus);</span>
+    }
+
+    /**
+     * 根据父节点查询子节点数据 &lt;br/&gt;
+     *
+     * @param menuId &lt;br/&gt;
+     * @return 子节点
+     */
+    @GetMapping(&quot;/{menuId}&quot;)
+    public Result getChildren(@PathVariable Long menuId) {
+        // 根据父 menuId 查询所有的子 menu
+<span class="nc" id="L55">        List&lt;TreeMenu&gt; menus = treeMenuMapper.getChildren(menuId);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for (TreeMenu menu : menus) {</span>
+<span class="nc" id="L57">            Boolean leaf = isLeaf(menu.getMenuId());</span>
+<span class="nc" id="L58">            menu.setIsLeaf(leaf);</span>
+<span class="nc" id="L59">        }</span>
+<span class="nc" id="L60">        return Result.ok().data(&quot;menus&quot;, menus);</span>
+    }
+
+    /**
+     * 根据名称查询 &lt;br/&gt;
+     *
+     * @param menuName &lt;br/&gt;
+     * @return 菜单树
+     */
+    @GetMapping(&quot;/search/{menuName}&quot;)
+    public Result searchMenus(@PathVariable String menuName) {
+<span class="nc" id="L71">        List&lt;TreeMenu&gt; menus = searchItems(menuName);</span>
+<span class="nc" id="L72">        return Result.ok().data(&quot;menus&quot;, menus);</span>
+    }
+
+    /**
+     * 判断是否是叶子节点 &lt;br/&gt;
+     *
+     * @param menuId &lt;br/&gt;
+     * @return 是否
+     */
+    public Boolean isLeaf(Long menuId) {
+<span class="nc" id="L82">        List&lt;TreeMenu&gt; children = treeMenuMapper.getChildren(menuId);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (CollectionUtils.isEmpty(children)) {</span>
+<span class="nc" id="L84">            return true;</span>
+        }
+<span class="nc" id="L86">        return false;</span>
+    }
+
+    /**
+     * 搜素查询 &lt;br/&gt;
+     * 相当于模糊查询。与之前在xml里实现的模糊查询相比，
+     * 不单单查的是包含关键字的字段，它能将包含关键字的
+     * 父节点也返回，能够以一棵树的形式返回
+     *
+     * @param name 菜单名
+     * @return 菜单树
+     */
+    // 根据包含的菜单名称关键字，类似于模糊查询，将包含关键字的菜单以一棵树返回
+    public List&lt;TreeMenu&gt; searchItems(String name) {
+//        // 结果集
+//        List&lt;TreeMenu&gt; resultTreeSet = new ArrayList&lt;&gt;();
+//        Set&lt;TreeMenu&gt; parentSet = new HashSet&lt;&gt;();
+//        Set&lt;TreeMenu&gt; rootSet = new HashSet&lt;&gt;();
+//
+//        List&lt;TreeMenu&gt; menuList = treeMenuMapper.searchItems(name);
+//        for (TreeMenu menu : menuList) {
+//// 如果该菜单已经在结果集中出现过，则跳过本次循环
+//            if (resultTreeSet.contains(menu)) {
+//                continue;
+//            }
+//
+//// 遍历该菜单和其所有父级菜单，并将它们加入结果集和 parentSet
+//            TreeMenu current = menu;
+//            while (current.getParentMenuId() != null) {
+//// 如果该菜单还有父级菜单，则继续向上查找
+//                boolean foundParent = false;
+//// 遍历所有菜单项，找到当前菜单项的父级菜单
+//                for (TreeMenu parent : menuList) {
+//                    if (current.getParentMenuId().equals(parent.getMenuId())) {
+//                        resultTreeSet.add(parent);
+//                        parentSet.add(parent);
+//                        current = parent;
+//                        foundParent = true;
+//                        break;
+//                    }
+//                }
+//                if (!foundParent) { // 如果没有找到当前菜单项的父级菜单，则跳出循环
+//                    break;
+//                }
+//            }
+//
+//// 将菜单项本身加入结果集和 parentSet
+//            resultTreeSet.add(menu);
+//            parentSet.add(menu);
+//        }
+//
+//// 遍历 resultTreeSet 集合，将没有父节点的节点作为根节点提取出来
+//        for (TreeMenu menu : resultTreeSet) {
+//            if (menu.getParentMenuId() == null) { // 如果当前菜单项没有父节点，则将它作为根节点
+//                rootSet.add(menu);
+//            }
+//        }
+//
+//        return buildTree(resultTreeSet);
+//    }
+<span class="nc" id="L146">        List&lt;TreeMenu&gt; allMenus = treeMenuMapper.searchItems(name);</span>
+<span class="nc" id="L147">        Map&lt;Long, TreeMenu&gt; menuMap = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        for (TreeMenu menu : allMenus) {</span>
+<span class="nc" id="L149">            menuMap.put(menu.getMenuId(), menu);</span>
+<span class="nc" id="L150">        }</span>
+        // 再在查询出所有的数据中进行搜索过滤
+<span class="nc" id="L152">        List&lt;TreeMenu&gt; menusAfterSearched = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        for (TreeMenu menu : allMenus) {</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            if (menu.getMenuName().contains(name)) {</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                if (!menusAfterSearched.contains(menu)) {</span>
+<span class="nc" id="L156">                    menusAfterSearched.add(menu);</span>
+                }
+                // 父节点
+<span class="nc" id="L159">                Long parentId = menu.getParentMenuId();</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">                while (parentId != 0) {</span>
+<span class="nc" id="L161">                    TreeMenu treeMenu = menuMap.get(parentId);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                    if (!menusAfterSearched.contains(treeMenu)) {</span>
+<span class="nc" id="L163">                        menusAfterSearched.add(treeMenu);</span>
+                    }
+<span class="nc" id="L165">                    parentId = treeMenu.getParentMenuId();</span>
+<span class="nc" id="L166">                }</span>
+            }
+<span class="nc" id="L168">        }</span>
+<span class="nc" id="L169">        return buildTree();</span>
+    }
+
+
+    /**
+     * 构建树形菜单
+     *
+     * @return 树形菜单
+     */
+    public List&lt;TreeMenu&gt; buildTree() {
+<span class="nc" id="L179">        List&lt;TreeMenu&gt; menus = treeMenuMapper.buildTree();</span>
+<span class="nc" id="L180">        List&lt;TreeMenu&gt; rootList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L181">        Map&lt;Long, TreeMenu&gt; map = new HashMap&lt;&gt;();</span>
+        // 遍历查询结果，组装父子节点关系
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        for (TreeMenu menu : menus) {</span>
+<span class="nc" id="L184">            map.put(menu.getMenuId(), menu);</span>
+            // 第一级节点作为根节点
+<span class="nc bnc" id="L186" title="All 2 branches missed.">            if (menu.getMenuLevel() == 1) {</span>
+<span class="nc" id="L187">                rootList.add(menu);</span>
+                // 非根节点挂在其父节点下
+            } else {
+<span class="nc" id="L190">                Long parentId = menu.getParentMenuId();</span>
+<span class="nc" id="L191">                TreeMenu parentMenu = map.get(parentId);</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">                if (parentMenu != null) {</span>
+<span class="nc" id="L193">                    List&lt;TreeMenu&gt; children = parentMenu.getChildren();</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">                    if (children == null) {</span>
+<span class="nc" id="L195">                        children = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L196">                        parentMenu.setChildren(children);</span>
+                    }
+<span class="nc" id="L198">                    children.add(menu);</span>
+<span class="nc" id="L199">                } else { // 如果找不到父节点，则抛出异常</span>
+<span class="nc" id="L200">                    throw new RuntimeException(&quot;Parent menu not found: parentId = &quot; + menu.getParentMenuId());</span>
+                }
+            }
+<span class="nc" id="L203">        }</span>
+        // 返回结果
+<span class="nc" id="L205">        return rootList;</span>
+    }
+
+//        // 将数据按照菜单等级排序
+//        Collections.sort(list, Comparator.comparingInt(TreeMenu::getMenuLevel));
+//        // 将节点按照菜单id放置到map中
+//        Map&lt;Long, TreeMenu&gt; map = new HashMap&lt;&gt;();
+//        for (TreeMenu menu : list) { // iter
+//            map.put(menu.getMenuId(), menu);
+//        }
+//        // 循环处理每个节点，将每个节点挂在其父节点上
+//        List&lt;TreeMenu&gt; rootList = new ArrayList&lt;&gt;();
+//        for (TreeMenu menu : list) {
+//            // 第一级节点作为根节点
+//            if (menu.getMenuLevel() == 1) {
+//                rootList.add(menu);
+//                // 非根节点挂在其父节点下
+//            } else {
+//                Long parentId = menu.getParentMenuId();
+//                TreeMenu parentMenu = map.get(parentId);
+//                if (parentMenu != null) {
+//                    List&lt;TreeMenu&gt; children = parentMenu.getChildren();
+//                    if (children == null) {
+//                        children = new ArrayList&lt;&gt;();
+//                        parentMenu.setChildren(children);
+//                    }
+//                    children.add(menu);
+//                } else {
+//                    // 兜底处理，抛出异常
+//                    throw new RuntimeException(&quot;Parent menu not found: parentId = &quot; + parentId);
+//                }
+//            }
+//
+//        }
+//        return rootList;
+//    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

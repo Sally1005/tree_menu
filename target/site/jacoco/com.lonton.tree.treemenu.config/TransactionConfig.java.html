@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransactionConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">treemenu</a> &gt; <a href="index.source.html" class="el_package">com.lonton.tree.treemenu.config</a> &gt; <span class="el_source">TransactionConfig.java</span></div><h1>TransactionConfig.java</h1><pre class="source lang-java linenums">package com.lonton.tree.treemenu.config;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.aop.Advisor;
+import org.springframework.aop.aspectj.AspectJExpressionPointcut;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
+import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
+
+/**
+ * TransactionConfig
+ * 事务管理配置，拦截controller包下方法
+ * @author 张利红
+ */
+@Aspect
+@Configuration
+<span class="fc" id="L23">public class TransactionConfig {</span>
+
+    /**
+     * 切面地址
+     */
+    private static final String AOP_POINTCUT_EXPRESSION = &quot;execution(* com.lonton.tree.treemenu.controller.*.*(..))&quot;;
+    /**
+     * 事务失效时间
+     */
+    private static final int TX_METHOD_TIMEOUT = 5;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+    /**
+     * 事务配置
+     */
+    @Bean
+    public TransactionInterceptor txAdvice() {
+
+<span class="fc" id="L43">        DefaultTransactionAttribute txAttr_REQUIRED = new DefaultTransactionAttribute();</span>
+        /**
+         * PROPAGATION_REQUIRED:事务隔离性为 1
+         * 若当前存在事务，则加入该事务
+         * 如果当前没有事务，则创建一个新的事务，这是默认值
+         */
+<span class="fc" id="L49">        txAttr_REQUIRED.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);</span>
+        /**
+         * 设置事务失效时间，如果超过5秒，则回滚事务
+         */
+<span class="fc" id="L53">        txAttr_REQUIRED.setTimeout(TX_METHOD_TIMEOUT);</span>
+
+<span class="fc" id="L55">        DefaultTransactionAttribute txAttr_REQUIRED_READONLY = new DefaultTransactionAttribute();</span>
+        /**
+         * transactiondefinition 定义事务的隔离级别；
+         * PROPAGATION_NOT_SUPPORTED 事务传播级别5，以非事务运行，如果当前存在事务，则把当前事务挂起
+         */
+<span class="fc" id="L60">        txAttr_REQUIRED_READONLY.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);</span>
+        /**
+         * 设置当前事务是否为只读事务
+         * true为只读
+         */
+<span class="fc" id="L65">        txAttr_REQUIRED_READONLY.setReadOnly(true);</span>
+
+        /**
+         * 事务管理规则，声明具备事务管理的方法名
+         */
+<span class="fc" id="L70">        NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();</span>
+
+<span class="fc" id="L72">        source.addTransactionalMethod(&quot;search*&quot;, txAttr_REQUIRED);</span>
+
+<span class="fc" id="L74">        source.addTransactionalMethod(&quot;get*&quot;, txAttr_REQUIRED_READONLY);</span>
+
+<span class="fc" id="L76">        return new TransactionInterceptor(transactionManager, source);</span>
+    }
+
+    /**
+     * 利用AspectJExpressionPointcut设置切面=切点+通知（写成内部bean的方式）
+     * &lt;br/&gt;
+     * @return
+     */
+    @Bean
+    public Advisor txAdviceAdvisor() {
+        /**
+         * 声明切点的面
+         * 切面（Aspect）：切面就是通知和切入点的结合。
+         * 通知和切入点共同定义了关于切面的全部内容——它的功能、在何时和何地完成其功能
+         */
+<span class="fc" id="L91">        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();</span>
+        /**
+         * 声明和设置需要拦截的方法,用切点语言描写
+         */
+<span class="fc" id="L95">        pointcut.setExpression(AOP_POINTCUT_EXPRESSION);</span>
+        /**
+         * 设置切面=切点pointcut+通知TxAdvice
+         */
+<span class="fc" id="L99">        return new DefaultPointcutAdvisor(pointcut, txAdvice());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
