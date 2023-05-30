@@ -1,16 +1,17 @@
-package com.lonton.tree.treemenu.pojo;
+package com.lonton.tree.treemenu.pojo.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * (TreeMenu)实体类
+ * 树形菜单实体类
  * <p/>
+ *
  * @author 张利红
  */
 @Data
@@ -32,17 +33,15 @@ public class TreeMenu implements Serializable {
     /**
      * 当前菜单的层级
      */
-    private Integer menuLevel;
+    private Long menuLevel;
 
     /**
      * 用于保存一个菜单的子菜单
      */
-    @TableField(exist = false)
     private List<TreeMenu> children;
     /**
      * 判断是否为叶子节点
      */
-    @TableField(exist = false)
     private Boolean isLeaf = false;
 
     /**
@@ -60,7 +59,21 @@ public class TreeMenu implements Serializable {
      */
     private Integer isDelete;
 
+    /**
+     * 无参构造
+     */
+    public TreeMenu() {
+        this.children = new ArrayList<>();
+    }
+
+    /**
+     * 获取子菜单
+     *
+     * @return 子菜单
+     */
+    public List<TreeMenu> getChildren() {
+        return children;
+    }
+
+
 }
-
-
-
