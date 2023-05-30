@@ -1,6 +1,6 @@
 package com.lonton.tree.treemenu;
 
-import com.lonton.tree.treemenu.pojo.TreeMenu;
+import com.lonton.tree.treemenu.pojo.entity.TreeMenu;
 import com.lonton.tree.treemenu.mapper.TreeMenuMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -21,14 +21,14 @@ class TreeMenuApplicationTests {
 
     @Test
     void testGetRootMenus() {
-        List<TreeMenu> rootMenus = treeMenuMapper.getRootMenus();
-        System.out.println(rootMenus);
+        List<TreeMenu> rootTreeMenus = treeMenuMapper.getRootMenus();
+        System.out.println(rootTreeMenus);
     }
 
     @Test
     void testGetChildrenMenus() {
-        List<TreeMenu> menus =  treeMenuMapper.getChildren(0L);
-        System.out.println(menus);
+        List<TreeMenu> treeMenus =  treeMenuMapper.getChildren(0L);
+        System.out.println(treeMenus);
     }
 
 }
