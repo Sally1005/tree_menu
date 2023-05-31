@@ -22,26 +22,39 @@ public class TreeMenuMapperTest {
     TreeMenuMapper treeMenuMapper;
 
     @Test
-    void testGetRootMenus() {
+    public void testGetAllTreeMenu() {
+        List<TreeMenu> allTreeMenus =  treeMenuMapper.getAllTreeMenu();
+        assertEquals(132,allTreeMenus.size(),"树形菜单节点的个数与实际个数不符。");
+    }
+
+    @Test
+    public void testGetRootMenus() {
         List<TreeMenu> rootMenus = treeMenuMapper.getRootMenus();
         assertEquals(3,rootMenus.size(),"根节点的个数与实际个数不符。");
     }
 
     @Test
-    void testGetChildrenMenus() {
+    public void testGetChildrenMenus() {
         // parent_menu_id = 1L
         List<TreeMenu> menus =  treeMenuMapper.getChildren(1L);
         assertEquals(7,menus.size(),"子节点的个数与实际个数不符。");
     }
 
     @Test
-    void testGetAllTreeMenu() {
-        List<TreeMenu> allTreeMenus =  treeMenuMapper.getAllTreeMenu();
-        assertEquals(132,allTreeMenus.size(),"树形菜单节点的个数与实际个数不符。");
+    public void testGetMenuById() {
+        List<TreeMenu> menu = treeMenuMapper.getMenuById(1L);
+        TreeMenu expected = new TreeMenu();
+        expected.setMenuId(1L)
+                .setParentMenuId(0L)
+                .setMenuName("月度")
+                .setMenuLevel(1L)
+                .setIsLeaf(false);
+        assertEquals(expected.toString(),menu.get(0).toString(),"树形菜单节点属性与期望值不匹配。");
+
     }
 
     @Test
-    void testSearchItems() {
+    public void testSearchItems() {
         List<TreeMenu> items =  treeMenuMapper.searchItems("年度");
         // 检查列表中是否只有一个元素
         assertEquals(1, items.size(),
