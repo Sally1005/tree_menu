@@ -41,8 +41,10 @@ public class TreeMenuController {
     public Result getRootMenus() {
         List<TreeMenu> menus = treeMenuMapper.getRootMenus();
         for (TreeMenu menu : menus) {
-            Boolean leaf = isLeaf(menu.getMenuId());
-            menu.setIsLeaf(leaf);
+            if (menu != null && menu.getMenuId() != null) {
+                Boolean leaf = isLeaf(menu.getMenuId());
+                menu.setIsLeaf(leaf);
+            }
         }
         return Result.ok().data("menus", menus);
     }
@@ -58,8 +60,10 @@ public class TreeMenuController {
         // 根据父 menuId 查询所有的子 menu
         List<TreeMenu> menus = treeMenuMapper.getChildren(menuId);
         for (TreeMenu menu : menus) {
-            Boolean leaf = isLeaf(menu.getMenuId());
-            menu.setIsLeaf(leaf);
+            if (menu != null && menu.getMenuId() != null) {
+                Boolean leaf = isLeaf(menu.getMenuId());
+                menu.setIsLeaf(leaf);
+            }
         }
         return Result.ok().data("menus", menus);
     }
