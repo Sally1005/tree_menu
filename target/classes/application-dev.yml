@@ -1,7 +1,7 @@
 # 服务器端配置
 server:
   # 服务端口
-  port: 8080
+  port: 8081
 
 # Spring配置
 spring:
@@ -18,4 +18,4 @@ spring:
 logging:
   # 日志的显示级别
   level:
-   com.lonton.tree.treemenu: debug
+   com.lonton.tree.treemenu: trace

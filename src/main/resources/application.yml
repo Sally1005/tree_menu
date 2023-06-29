@@ -72,3 +72,7 @@ mybatis:
   # 配置SQL的XML文件的位置
   mapper-locations: classpath:mapper/*.xml
 
+# 自定义配置
+tree-menu:
+  jwt:
+    secret-key: xnGnmlfdasfdsaurefuifdknjfdskjhajhef
