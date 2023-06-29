@@ -1,166 +1,308 @@
-/* 创建数据库tree,在库中创建tree_menu数据库表 */
-CREATE DATABASE IF NOT EXISTS `tree`;
-USE `tree`;
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : test
+ Source Server Type    : MySQL
+ Source Server Version : 100307 (10.3.7-MariaDB)
+ Source Host           : localhost:3306
+ Source Schema         : tree
+
+ Target Server Type    : MySQL
+ Target Server Version : 100307 (10.3.7-MariaDB)
+ File Encoding         : 65001
+ Author                : 张利红
+
+ Date: 29/06/2023 15:18:35
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- ----------------------------
--- Table structure for tree_menu
+-- Table structure for tree_menu(菜单表)
 -- ----------------------------
 DROP TABLE IF EXISTS `tree_menu`;
-CREATE TABLE `tree_menu`
-(
-    `menu_id`        bigint(20) NOT NULL AUTO_INCREMENT COMMENT '当前菜单ID',
-    `menu_name`      varchar(255) DEFAULT NULL COMMENT '菜单名',
-    `parent_menu_id` bigint(20)   DEFAULT NULL COMMENT '当前菜单的父菜单ID',
-    `menu_level`     int(11)      DEFAULT NULL COMMENT '当前菜单的层级',
-    `gmt_create`     DATETIME     DEFAULT NULL COMMENT '数据创建时间',
-    `gmt_modified`   DATETIME     DEFAULT NULL COMMENT '数据最后修改时间',
-    `is_delete`      tinyint(4)   DEFAULT '0' COMMENT '是否删除  -1：已删除  0：正常',
-    PRIMARY KEY (`menu_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+CREATE TABLE `tree_menu`  (
+                              `menu_id` bigint NOT NULL AUTO_INCREMENT COMMENT '当前菜单ID',
+                              `menu_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单名',
+                              `parent_menu_id` bigint NULL DEFAULT NULL COMMENT '当前菜单的父菜单ID',
+                              `menu_level` bigint NULL DEFAULT NULL COMMENT '当前菜单的层级',
+                              `perms` varchar(6553) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限',
+                              `menu_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                              `menu_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前菜单地址',
+                              `type` int NULL DEFAULT NULL COMMENT '类型   0：目录   1：菜单   2：按钮',
+                              `icon` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+                              `gmt_create` datetime NULL DEFAULT NULL COMMENT '数据创建时间',
+                              `gmt_modified` datetime NULL DEFAULT NULL COMMENT '数据最后修改时间',
+                              `is_delete` tinyint NULL DEFAULT 0 COMMENT '是否删除  -1：已删除  0：正常',
+                              PRIMARY KEY (`menu_id`) USING BTREE,
+                              INDEX `tree_menu_idx`(`menu_id` ASC, `menu_level` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 135 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
-start transaction;
-savepoint a;
 -- ----------------------------
--- Records of tree_menu
+-- Records of tree_menu(菜单数据)
 -- ----------------------------
-insert into `tree_menu`(`menu_id`, `menu_name`, `parent_menu_id`, `menu_level`)
-values (1, '月度', 0, 1),
-       (2, '价格', 1, 2),
-       (3, '70个大中城市住宅销售价格指数', 2, 3),
-       (4, '各地区工业生产者价格指数(上年同月=100)', 2, 3),
-       (5, '工业生产者出厂价格分类指数', 2, 3),
-       (6, '工业生产者购进价格指数', 2, 3),
-       (7, '各地居民消费和商品零售价格指数', 2, 3),
-       (8, '36大中城市居民消费和商品零售价格指数(2016-)', 2, 3),
-       (9, '36大中城市居民消费和商品零售价格指数(-2015)', 2, 3),
-       (10, '各地居民消费价格分类指数(上年同月＝100)(2016-)', 2, 3),
-       (11, '各地居民消费价格分类指数(上年同月＝100)(-2015)', 2, 3),
-       (12, '36大中城市居民消费价格分类指数(上年同月＝100)(2016-)', 2, 3),
-       (13, '36大中城市居民消费价格分类指数(上年同月＝100)(-2015)', 2, 3),
-       (14, '分城乡居民消费和商品零售价格指数', 2, 3),
-       (15, '累计全国及36个大中城市居民消费价格分类指数(上年同期＝100)(2016-)', 2, 3),
-       (16, '累计全国及36个大中城市居民消费价格分类指数(上年同期＝100)(-2015)', 2, 3),
-       (17, '工业', 1, 2),
-       (18, '工业增加值增长速度', 17, 3),
-       (19, '工业主要产品产量及增长速度', 17, 3),
-       (20, '工业分大类行业增加值增长速度', 17, 3),
-       (21, '各地区工业增加值增长速度', 17, 3),
-       (22, '分行业主要工业经济指标', 17, 3),
-       (23, '能源', 1, 2),
-       (24, '能源产品产量', 23, 3),
-       (25, '固定资产投资和房地产', 1, 2),
-       (26, '固定资产投资（不含农户）情况', 25, 3),
-       (27, '固定资产投资资金来源情况', 25, 3),
-       (28, '各行业固定资产投资(不含农户)情况', 25, 3),
-       (29, '各地区固定资产投资情况', 25, 3),
-       (30, '按登记注册类型分的固定资产投资（不含农户）情况', 25, 3),
-       (31, '各地区固定资产投资构成情况', 25, 3),
-       (32, '各地区固定资产住宅建设情况', 25, 3),
-       (33, '各地区固定资产投资项目情况', 25, 3),
-       (34, '全国房地产开发投资情况', 25, 3),
-       (35, '各地区房地产开发投资情况', 25, 3),
-       (36, '各地区商品房销售面积增长情况', 25, 3),
-       (37, '各地区住宅销售面积增长情况', 25, 3),
-       (38, '各地区办公楼销售面积增长情况', 25, 3),
-       (39, '各地区商业营业用房销售面积增长情况', 25, 3),
-       (40, '各地区房地产开发规模与开、竣工面积增长情况', 25, 3),
-       (41, '各地区住宅开发规模与开、竣工面积增长情况', 25, 3),
-       (42, '各地区房地产开发规模与开、竣工面积增长情况', 25, 3),
-       (43, '各地区商业营业用房开发规模与开、竣工面积增长情况', 25, 3),
-       (44, '运输邮电', 1, 2),
-       (45, '全社会客货运输量', 44, 3),
-       (46, '邮电业务量完成情况', 44, 3),
-       (47, '国内贸易', 1, 2),
-       (48, '全国社会消费品零售总额', 47, 3),
-       (49, '限额以上企业（单位）商品零售类值', 47, 3),
-       (50, '国际比较', 1, 2),
-       (51, '各月美国居民消费者价格涨跌率、失业率和进出口贸易', 50, 3),
-       (52, '各月日本居民消费者价格涨跌率、失业率和进出口贸易', 50, 3),
-       (53, '各月欧元区居民消费者价格涨跌率、失业率和进出口贸易', 50, 3),
-       (54, '季度', 0, 1),
-       (55, '就业与工资', 54, 2),
-       (56, '分季度城镇登记失业率', 55, 3),
-       (57, '价格', 54, 2),
-       (58, '各地区农产品生产价格指数(上年同期=100)', 57, 3),
-       (59, '各地区固定资产投资价格指数(上年同期=100)', 57, 3),
-       (60, '国民经济核算', 54, 2),
-       (61, '分季国内生产总值(现价)', 60, 3),
-       (62, '累计国内生产总值(现价)', 60, 3),
-       (63, '分季国内生产总值(不变价)', 60, 3),
-       (64, '累计国内生产总值(不变价)', 60, 3),
-       (65, '分季国内生产总值指数', 60, 3),
-       (66, '累计国内生产总值指数', 60, 3),
-       (67, '国内生产总值环比增长速度', 60, 3),
-       (68, '累计地区生产总值', 60, 3),
-       (69, '累计地区生产总值指数(上年=100)', 60, 3),
-       (70, '农业', 54, 2),
-       (71, '累计农林牧渔业总产值', 70, 3),
-       (72, '工业', 54, 2),
-       (73, '主要工业产品的生产、销售与库存', 72, 3),
-       (74, '建筑业', 54, 2),
-       (75, '累计各地区按构成分组的建筑业总产值', 74, 3),
-       (76, '累计各地区建筑业总产值和竣工产值', 74, 3),
-       (77, '累计各地区建筑业企业签订合同情况', 74, 3),
-       (78, '累计各地区建筑业企业房屋建筑施工面积', 74, 3),
-       (79, '累计各地区建筑业企业个数、从业人数和劳动生产率', 74, 3),
-       (80, '累计各地区建筑业企业房屋竣工面积', 74, 3),
-       (81, '累计各地区建筑业企业房屋竣工价值', 74, 3),
-       (82, '累计各地区按构成分组的国有及国有控股企业建筑业总产值', 74, 3),
-       (83, '累计各地区国有及国有控股企业建筑业总产值和竣工产值', 74, 3),
-       (84, '累计各地区国有及国有控股建筑业企业签订合同情况', 74, 3),
-       (85, '累计各地区国有及国有控股建筑业企业房屋建筑施工面积', 74, 3),
-       (86, '累计各地区国有及国有控股建筑业企业个数、从业人数和劳动生产率', 74, 3),
-       (87, '累计各地区国有及国有控股建筑业企业房屋竣工面积', 74, 3),
-       (88, '累计各地区国有及国有控股建筑业企业房屋竣工价值', 74, 3),
-       (89, '累计各地区建筑业企业总收入', 74, 3),
-       (90, '累计各地区建筑业企业利润', 74, 3),
-       (91, '累计各地区建筑业企业费用情况', 74, 3),
-       (92, '累计各地区国有及国有控股建筑业企业总收入', 74, 3),
-       (93, '累计各地区国有及国有控股建筑业企业利润', 74, 3),
-       (94, '累计各地区国有及国有控股建筑业企业费用情况', 74, 3),
-       (95, '累计各地区建筑业企业资产负债情况', 74, 3),
-       (96, '累计各地区国有及国有控股建筑业企业资产负债情况', 74, 3),
-       (97, '国际比较', 54, 2),
-       (98, '主要国家和地区国内生产总值环比增长率', 97, 3),
-       (99, '主要国家和地区国内生产总值同比增长率', 97, 3),
-       (100, '年度', 0, 1),
-       (101, '各地区行政区划', 100, 2),
-       (102, '国民经济核算指标', 100, 2),
-       (103, '人口基本情况', 100, 2),
-       (104, '固定资产投资概况', 100, 2),
-       (105, '社会消费品零售总额', 100, 2),
-       (106, '对外贸易和利用外资', 100, 2),
-       (107, '国家财政收支', 100, 2),
-       (108, '金融机构人民币信贷收支(年底余额)', 100, 2),
-       (109, '居民消费价格指数(上年=100)（2016-）', 100, 2),
-       (110, '居民消费价格指数(上年=100)（-2015）', 100, 2),
-       (111, '商品零售价格指数(上年=100)', 100, 2),
-       (112, '农产品生产价格指数(上年＝100)', 100, 2),
-       (113, '工业生产者出厂价格指数(上年＝100)', 100, 2),
-       (114, '工业生产者购进价格分类指数(上年＝100)', 100, 2),
-       (115, '居民人均可支配收入', 100, 2),
-       (116, '农业基本情况', 100, 2),
-       (117, '规模以上工业企业工业增加值增长速度', 100, 2),
-       (118, '能源生产总量和构成', 100, 2),
-       (119, '能源消费总量和构成', 100, 2),
-       (120, '建筑业企业概况', 100, 2),
-       (121, '建筑业企业生产完成情况', 100, 2),
-       (122, '交通运输业基本情况', 100, 2),
-       (123, '邮电业务基本情况', 100, 2),
-       (124, '招生、在校学生、毕业生数', 100, 2),
-       (125, '民办教育情况', 100, 2),
-       (126, '科技事业发展情况', 100, 2),
-       (127, '卫生、文化和体育基本情况', 100, 2),
-       (128, '社会服务基本情况', 100, 2),
-       (129, '环境保护基本概况', 100, 2),
-       (130, '香港特别行政区主要社会经济指标', 100, 2),
-       (131, '澳门特别行政区主要社会经济指标', 100, 2),
-       (132, '台湾省主要社会经济指标', 100, 2);
-savepoint b;
-insert into `tree_menu`(`menu_id`, `menu_name`)
-values (133, '基础服务基本情况'),
-       (134, '毕业生就业情况');
-rollback to b;
-commit;
-Alter TABLE tree_menu
-    ADD perms VARCHAR(6553);
+INSERT INTO `tree_menu` VALUES (1, '月度', 0, 1, 'tree:menu:view', NULL, '/sys/menu/month', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (2, '价格', 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (3, '70个大中城市住宅销售价格指数', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (4, '各地区工业生产者价格指数(上年同月=100)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (5, '工业生产者出厂价格分类指数', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (6, '工业生产者购进价格指数', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (7, '各地居民消费和商品零售价格指数', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (8, '36大中城市居民消费和商品零售价格指数(2016-)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (9, '36大中城市居民消费和商品零售价格指数(-2015)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (10, '各地居民消费价格分类指数(上年同月＝100)(2016-)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (11, '各地居民消费价格分类指数(上年同月＝100)(-2015)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (12, '36大中城市居民消费价格分类指数(上年同月＝100)(2016-)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (13, '36大中城市居民消费价格分类指数(上年同月＝100)(-2015)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (14, '分城乡居民消费和商品零售价格指数', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (15, '累计全国及36个大中城市居民消费价格分类指数(上年同期＝100)(2016-)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (16, '累计全国及36个大中城市居民消费价格分类指数(上年同期＝100)(-2015)', 2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (17, '工业', 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (18, '工业增加值增长速度', 17, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (19, '工业主要产品产量及增长速度', 17, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (20, '工业分大类行业增加值增长速度', 17, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (21, '各地区工业增加值增长速度', 17, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (22, '分行业主要工业经济指标', 17, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (23, '能源', 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (24, '能源产品产量', 23, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (25, '固定资产投资和房地产', 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (26, '固定资产投资（不含农户）情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (27, '固定资产投资资金来源情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (28, '各行业固定资产投资(不含农户)情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (29, '各地区固定资产投资情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (30, '按登记注册类型分的固定资产投资（不含农户）情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (31, '各地区固定资产投资构成情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (32, '各地区固定资产住宅建设情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (33, '各地区固定资产投资项目情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (34, '全国房地产开发投资情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (35, '各地区房地产开发投资情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (36, '各地区商品房销售面积增长情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (37, '各地区住宅销售面积增长情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (38, '各地区办公楼销售面积增长情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (39, '各地区商业营业用房销售面积增长情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (40, '各地区房地产开发规模与开、竣工面积增长情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (41, '各地区住宅开发规模与开、竣工面积增长情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (42, '各地区房地产开发规模与开、竣工面积增长情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (43, '各地区商业营业用房开发规模与开、竣工面积增长情况', 25, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (44, '运输邮电', 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (45, '全社会客货运输量', 44, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (46, '邮电业务量完成情况', 44, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (47, '国内贸易', 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (48, '全国社会消费品零售总额', 47, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (49, '限额以上企业（单位）商品零售类值', 47, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (50, '国际比较', 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (51, '各月美国居民消费者价格涨跌率、失业率和进出口贸易', 50, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (52, '各月日本居民消费者价格涨跌率、失业率和进出口贸易', 50, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (53, '各月欧元区居民消费者价格涨跌率、失业率和进出口贸易', 50, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (54, '季度', 0, 1, 'tree:menu:view', NULL, '/sys/menu/quarter', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (55, '就业与工资', 54, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (56, '分季度城镇登记失业率', 55, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (57, '价格', 54, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (58, '各地区农产品生产价格指数(上年同期=100)', 57, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (59, '各地区固定资产投资价格指数(上年同期=100)', 57, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (60, '国民经济核算', 54, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (61, '分季国内生产总值(现价)', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (62, '累计国内生产总值(现价)', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (63, '分季国内生产总值(不变价)', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (64, '累计国内生产总值(不变价)', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (65, '分季国内生产总值指数', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (66, '累计国内生产总值指数', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (67, '国内生产总值环比增长速度', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (68, '累计地区生产总值', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (69, '累计地区生产总值指数(上年=100)', 60, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (70, '农业', 54, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (71, '累计农林牧渔业总产值', 70, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (72, '工业', 54, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (73, '主要工业产品的生产、销售与库存', 72, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (74, '建筑业', 54, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (75, '累计各地区按构成分组的建筑业总产值', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (76, '累计各地区建筑业总产值和竣工产值', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (77, '累计各地区建筑业企业签订合同情况', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (78, '累计各地区建筑业企业房屋建筑施工面积', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (79, '累计各地区建筑业企业个数、从业人数和劳动生产率', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (80, '累计各地区建筑业企业房屋竣工面积', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (81, '累计各地区建筑业企业房屋竣工价值', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (82, '累计各地区按构成分组的国有及国有控股企业建筑业总产值', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (83, '累计各地区国有及国有控股企业建筑业总产值和竣工产值', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (84, '累计各地区国有及国有控股建筑业企业签订合同情况', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (85, '累计各地区国有及国有控股建筑业企业房屋建筑施工面积', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (86, '累计各地区国有及国有控股建筑业企业个数、从业人数和劳动生产率', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (87, '累计各地区国有及国有控股建筑业企业房屋竣工面积', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (88, '累计各地区国有及国有控股建筑业企业房屋竣工价值', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (89, '累计各地区建筑业企业总收入', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (90, '累计各地区建筑业企业利润', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (91, '累计各地区建筑业企业费用情况', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (92, '累计各地区国有及国有控股建筑业企业总收入', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (93, '累计各地区国有及国有控股建筑业企业利润', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (94, '累计各地区国有及国有控股建筑业企业费用情况', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (95, '累计各地区建筑业企业资产负债情况', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (96, '累计各地区国有及国有控股建筑业企业资产负债情况', 74, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (97, '国际比较', 54, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (98, '主要国家和地区国内生产总值环比增长率', 97, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (99, '主要国家和地区国内生产总值同比增长率', 97, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (100, '年度', 0, 1, 'tree:menu:view', NULL, '/sys/menu/year', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (101, '各地区行政区划', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (102, '国民经济核算指标', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (103, '人口基本情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (104, '固定资产投资概况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (105, '社会消费品零售总额', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (106, '对外贸易和利用外资', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (107, '国家财政收支', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (108, '金融机构人民币信贷收支(年底余额)', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (109, '居民消费价格指数(上年=100)（2016-）', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (110, '居民消费价格指数(上年=100)（-2015）', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (111, '商品零售价格指数(上年=100)', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (112, '农产品生产价格指数(上年＝100)', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (113, '工业生产者出厂价格指数(上年＝100)', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (114, '工业生产者购进价格分类指数(上年＝100)', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (115, '居民人均可支配收入', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (116, '农业基本情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (117, '规模以上工业企业工业增加值增长速度', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (118, '能源生产总量和构成', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (119, '能源消费总量和构成', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (120, '建筑业企业概况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (121, '建筑业企业生产完成情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (122, '交通运输业基本情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (123, '邮电业务基本情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (124, '招生、在校学生、毕业生数', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (125, '民办教育情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (126, '科技事业发展情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (127, '卫生、文化和体育基本情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (128, '社会服务基本情况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (129, '环境保护基本概况', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (130, '香港特别行政区主要社会经济指标', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (131, '澳门特别行政区主要社会经济指标', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (132, '台湾省主要社会经济指标', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+
+-- ----------------------------
+-- Table structure for tree_menu_role(菜单角色关系表)
+-- ----------------------------
+DROP TABLE IF EXISTS `tree_menu_role`;
+CREATE TABLE `tree_menu_role`  (
+                                   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '编号',
+                                   `menu_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '菜单id',
+                                   `role_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '角色id',
+                                   `gmt_create` datetime NULL DEFAULT NULL COMMENT '数据创建时间',
+                                   `gmt_modified` datetime NULL DEFAULT NULL COMMENT '数据最后修改时间',
+                                   `parent_id` bigint NULL DEFAULT NULL COMMENT '角色父级id',
+                                   PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单角色' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tree_menu_role(菜单角色数据)
+-- ----------------------------
+INSERT INTO `tree_menu_role` VALUES (1, 1, 4, NULL, NULL, 4);
+INSERT INTO `tree_menu_role` VALUES (2, 54, 3, NULL, NULL, 4);
+INSERT INTO `tree_menu_role` VALUES (3, 100, 2, NULL, NULL, 4);
+INSERT INTO `tree_menu_role` VALUES (4, NULL, 1, NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for tree_permission(权限表)
+-- ----------------------------
+DROP TABLE IF EXISTS `tree_permission`;
+CREATE TABLE `tree_permission`  (
+                                    `id` bigint NOT NULL COMMENT '编号',
+                                    `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '名称',
+                                    `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '值',
+                                    `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '描述',
+                                    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tree_permission(权限数据)
+-- ----------------------------
+INSERT INTO `tree_permission` VALUES (1, '用户-更新', '/tree/user/update', '更新数据');
+INSERT INTO `tree_permission` VALUES (2, '用户-读取', '/tree/user/read', '读取数据');
+INSERT INTO `tree_permission` VALUES (3, '用户-删除', '/tree/user/delete', '删除数据');
+INSERT INTO `tree_permission` VALUES (4, '用户-读取', '/tree/user/read', '读取数据');
+
+-- ----------------------------
+-- Table structure for tree_role(角色表)
+-- ----------------------------
+DROP TABLE IF EXISTS `tree_role`;
+CREATE TABLE `tree_role`  (
+                              `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '编号',
+                              `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '角色名称',
+                              `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                              PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色管理' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tree_role(角色数据)
+-- ----------------------------
+INSERT INTO `tree_role` VALUES (1, 'root', '超级管理员');
+INSERT INTO `tree_role` VALUES (2, 'year', '年度管理员');
+INSERT INTO `tree_role` VALUES (3, 'quarter', '季度管理员');
+INSERT INTO `tree_role` VALUES (4, 'month', '月度管理员');
+
+-- ----------------------------
+-- Table structure for tree_role_permission(角色权限关系表)
+-- ----------------------------
+DROP TABLE IF EXISTS `tree_role_permission`;
+CREATE TABLE `tree_role_permission`  (
+                                         `id` bigint NOT NULL COMMENT '编号',
+                                         `permission_id` bigint NULL DEFAULT NULL COMMENT '权限id',
+                                         `role_id` bigint NULL DEFAULT NULL COMMENT '角色id',
+                                         PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tree_role_permission(角色权限数据)
+-- ----------------------------
+INSERT INTO `tree_role_permission` VALUES (1, 1, 1);
+INSERT INTO `tree_role_permission` VALUES (2, 2, 1);
+INSERT INTO `tree_role_permission` VALUES (3, 3, 1);
+INSERT INTO `tree_role_permission` VALUES (4, 4, 2);
+
+-- ----------------------------
+-- Table structure for tree_user(用户表)
+-- ----------------------------
+DROP TABLE IF EXISTS `tree_user`;
+CREATE TABLE `tree_user`  (
+                              `id` bigint NOT NULL AUTO_INCREMENT COMMENT '用户编号',
+                              `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '用户名',
+                              `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '昵称',
+                              `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
+                              `role_id` bigint NULL DEFAULT NULL COMMENT '角色编号',
+                              `enable` tinyint NULL DEFAULT NULL COMMENT '是否启用，1=启用，0=未启用',
+                              PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tree_user(用户数据)
+-- ----------------------------
+INSERT INTO `tree_user` VALUES (1, 'root', '超级管理员', '$2a$10$mLTqtptnw9RvEIZkJ3ljG.EWsn3dbSpj/z9V4FzJi3WhZ/yuL9WPi', 1, 1);
+INSERT INTO `tree_user` VALUES (2, 'year', '年度管理员', '$2a$10$mLTqtptnw9RvEIZkJ3ljG.EWsn3dbSpj/z9V4FzJi3WhZ/yuL9WPi', 2, 1);
+INSERT INTO `tree_user` VALUES (3, 'quarter', '季度管理员', '$2a$10$mLTqtptnw9RvEIZkJ3ljG.EWsn3dbSpj/z9V4FzJi3WhZ/yuL9WPi', 3, 1);
+INSERT INTO `tree_user` VALUES (4, 'month', '月度管理员', '$2a$10$mLTqtptnw9RvEIZkJ3ljG.EWsn3dbSpj/z9V4FzJi3WhZ/yuL9WPi', 4, 1);
+INSERT INTO `tree_user` VALUES (13, '3333', '33333', '$2a$10$RsnTmoLumaoRFzAr8IYB9egsWThaBJ.OyENzwETCd3Lp7cwN1sQYi', NULL, 0);
+INSERT INTO `tree_user` VALUES (14, 'sally', '萨利', '$2a$10$wKicaQkfuaoe03YaE3l/se.7/Iwm107G5AHnXhE8xaoa/kpVGGpAC', NULL, NULL);
+INSERT INTO `tree_user` VALUES (15, '萌二', '萌小二', '$2a$10$1HBRd0BnisxQaTw4Uo5o8uzAdxtbMWpY6npLxAlxxrhH2ZSFumN5y', NULL, NULL);
+
+-- ----------------------------
+-- Table structure for tree_user_role(用户角色表)
+-- ----------------------------
+DROP TABLE IF EXISTS `tree_user_role`;
+CREATE TABLE `tree_user_role`  (
+                                   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '编号',
+                                   `user_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
+                                   `role_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '角色id',
+                                   PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户角色' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tree_user_role(用户角色数据)
+-- ----------------------------
+INSERT INTO `tree_user_role` VALUES (1, 1, 1);
+INSERT INTO `tree_user_role` VALUES (2, 2, 2);
+INSERT INTO `tree_user_role` VALUES (3, 3, 3);
+INSERT INTO `tree_user_role` VALUES (4, 4, 4);
+INSERT INTO `tree_user_role` VALUES (8, 11, 1);
+INSERT INTO `tree_user_role` VALUES (10, 13, 1);
+INSERT INTO `tree_user_role` VALUES (11, 14, 2);
+INSERT INTO `tree_user_role` VALUES (12, 15, 2);
+INSERT INTO `tree_user_role` VALUES (13, 15, 3);
+INSERT INTO `tree_user_role` VALUES (14, 15, 4);
+
+SET FOREIGN_KEY_CHECKS = 1;
