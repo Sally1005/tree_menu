@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lonton.tree.treemenu.mapper.UserMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tree.tree_user(user_name, nick_name, password, enable)
+        VALUES (#{userName}, #{nickName}, #{password}, #{enable})
+    </insert>
+
+    <select id="countByUserName" resultType="int">
+        SELECT count(*)
+        FROM tree.tree_user
+        WHERE user_name = #{userName}
+
+    </select>
+
+    <!-- UserLoginInfoVO getLoginInfoByUserName(String userName); -->
+    <select id="getLoginInfoByUserName" resultMap="LoginResultMap">
+        SELECT
+        <include refid="LoginQueryFields"/>
+        FROM
+        tree.tree_user
+        left join tree.tree_user_role on tree_user.id = tree.tree_user_role.user_id
+        left join tree.tree_role on tree_user_role .role_id = tree_user_role.id
+        left join tree.tree_role_permission on tree_user_role.role_id = tree_role_permission.role_id
+        left join tree.tree_permission on tree_role_permission.permission_id = tree_permission.id
+        WHERE
+        user_name=#{userName}
+    </select>
+
+    <sql id="LoginQueryFields">
+        <if test="true">
+            tree_user.id,
+            tree_user.user_name,
+            tree_user.password,
+            tree_user.enable,
+            tree_permission.value
+        </if>
+    </sql>
+
+    <resultMap id="LoginResultMap" type="com.lonton.tree.treemenu.pojo.vo.UserLoginInfoVO">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="enable" property="enable"/>
+        <collection property="permissions" ofType="java.lang.String">
+            <constructor>
+                <arg column="value"/>
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <!-- List<UserListItemVO> list(); -->
+    <select id="list" resultMap="ListResultMap">
+        SELECT
+        <include refid="ListQueryFields"/>
+        FROM
+        tree_user
+        ORDER BY
+        id
+    </select>
+    <sql id="ListQueryFields">
+        <if test="true">
+            id, user_name, nick_name, enable
+        </if>
+    </sql>
+
+    <resultMap id="ListResultMap" type="com.lonton.tree.treemenu.pojo.vo.UserListItemVO">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="enable" property="enable"/>
+    </resultMap>
+
+    <!-- UserStandardVO getStandardById(Long id); -->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        tree.tree_user
+        WHERE
+        id = #{id}
+    </select>
+    <sql id="StandardQueryFields">
+        <if test="true">
+            user_id, user_name, password,nick_name, enable
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="com.lonton.tree.treemenu.pojo.vo.UserStandardVO">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="enable" property="enable"/>
+    </resultMap>
+
+    <!-- int deleteById(Long id); -->
+    <delete id="deleteById">
+        DELETE
+        FROM tree.tree_user
+        WHERE id = #{id}
+    </delete>
+
+    <!--int update(User user);-->
+    <update id="update">
+        UPDATE
+        tree_user
+        <set>
+            <if test="userName != null">
+                user_name=#{userName},
+            </if>
+            <if test="password != null">
+                password=#{password},
+            </if>
+            <if test="nickName != null">
+                nick_name=#{nickName},
+            </if>
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- setEnable(Long id); -->
+    <update id="setEnable">
+        UPDATE tree_user
+        SET enable = 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- setDisable(Long id); -->
+    <update id="setDisable">
+        UPDATE tree_user
+        SET enable = 0
+        WHERE id = #{id}
+    </update>
+
+</mapper>

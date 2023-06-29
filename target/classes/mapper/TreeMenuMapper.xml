@@ -3,18 +3,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lonton.tree.treemenu.mapper.TreeMenuMapper">
 
-    <resultMap type="com.lonton.tree.treemenu.pojo.TreeMenu" id="TreeMenuMap">
+    <resultMap type="com.lonton.tree.treemenu.pojo.entity.TreeMenu" id="TreeMenuMap">
         <result property="menuId" column="menu_id"/>
         <result property="menuName" column="menu_name"/>
         <result property="parentMenuId" column="parent_menu_id"/>
         <result property="menuLevel" column="menu_level"/>
     </resultMap>
 
-    <!--List<TreeMenu> getAllTreeMenu()-->
-    <select id="getAllTreeMenu" resultType="com.lonton.tree.treemenu.pojo.TreeMenu">
-        select
+    <!--List<TreeMenu> getAllTreeMenu();获取所有数据-->
+    <select id="getAllTreeMenu" resultType="com.lonton.tree.treemenu.pojo.entity.TreeMenu">
+        SELECT
         menu_id, menu_name, parent_menu_id, menu_level
-        from tree_menu
+        FROM tree_menu
         <where>
             <if test="menuId != null">
                 and menu_id = #{menuId}
@@ -33,11 +33,11 @@
         menu_id
     </select>
 
-    <!--List<TreeMenu> getRootMenus()-->
-    <select id="getRootMenus" resultType="com.lonton.tree.treemenu.pojo.TreeMenu">
-        select
+    <!--List<TreeMenu> getRootMenus();获取根节点菜单-->
+    <select id="getRootMenus" resultType="com.lonton.tree.treemenu.pojo.entity.TreeMenu">
+        SELECT
         menu_id, menu_name, parent_menu_id, menu_level
-        from tree_menu
+        FROM tree_menu
         <where>
             parent_menu_id = 0
         </where>
@@ -45,11 +45,11 @@
         menu_id
     </select>
 
-    <!--List<TreeMenu> getChildren(@Param("menuId") Long menuId)-->
-    <select id="getChildren" resultType="com.lonton.tree.treemenu.pojo.TreeMenu">
-        select
+    <!--List<TreeMenu> getChildren(@Param("menuId") Long menuId);根据父节点查询子节点数据-->
+    <select id="getChildren" resultType="com.lonton.tree.treemenu.pojo.entity.TreeMenu">
+        SELECT
         menu_id, menu_name, parent_menu_id, menu_level
-        from tree_menu
+        FROM tree_menu
         <where>
             parent_menu_id = #{menuId}
         </where>
@@ -57,25 +57,31 @@
         parent_menu_id ASC,menu_id ASC
     </select>
 
-    <!--List<TreeMenu> buildTree();构建树形菜单-->
+    <!--List<TreeMenu> buildTree();-->
     <select id="buildTree" resultMap="TreeMenuMap">
-        SELECT /*+INDEX(tree_menu tree_menu_idx) */
-            menu_id,
-            menu_name,
-            parent_menu_id,
-            menu_level
+        SELECT menu_id,
+               menu_name,
+               parent_menu_id,
+               menu_level
         FROM tree_menu
         ORDER BY menu_level
     </select>
 
-    <!--List<TreeMenu> searchItems(String name);根据菜单名称进行搜索-->
+    <!--getMenuById(Long menuId);根据菜单ID查询-->
+    <select id="getMenuById" resultMap="TreeMenuMap">
+        SELECT *
+        FROM tree_menu
+        WHERE menu_id = #{menuId}
+    </select>
+
+    <!--List<TreeMenu> searchItems(String menuName);根据菜单名称查询（SQL递归）-->
     <select id="searchItems" resultMap="TreeMenuMap">
         WITH RECURSIVE tree AS (SELECT menu_id
                                      , menu_name
                                      , parent_menu_id
                                      , menu_level
                                 FROM tree_menu
-                                WHERE menu_name LIKE CONCAT('%', #{name}, '%')
+                                WHERE menu_name LIKE CONCAT('%', #{menuName}, '%')
                                 UNION ALL
                                 SELECT t1.menu_id, t1.menu_name, t1.parent_menu_id, t1.menu_level
                                 FROM tree_menu t1

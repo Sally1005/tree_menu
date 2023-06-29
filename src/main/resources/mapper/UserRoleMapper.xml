@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lonton.tree.treemenu.mapper.UserRoleMapper">
+
+    <!-- int insert(UserRole userRole); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tree_user_role (user_id, role_id)
+        VALUES (#{userId}, #{roleId})
+    </insert>
+
+    <!-- int insertBatch(UserRole[] userRoleList); -->
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tree_user_role
+        (user_id, role_id)
+        VALUES
+        <foreach collection="array" item="userRole" separator=",">
+            (#{userRole.userId}, #{userRole.roleId})
+        </foreach>
+    </insert>
+
+    <!-- int deleteByUserId(Long userId); -->
+    <delete id="deleteByUserId">
+        DELETE
+        FROM tree.tree_user_role
+        WHERE user_id = #{userId}
+    </delete>
+
+</mapper>

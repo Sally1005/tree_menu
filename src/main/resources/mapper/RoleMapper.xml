@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC  "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lonton.tree.treemenu.mapper.RoleMapper">
+
+    <!-- List<RoleListItemVO> list(); -->
+    <select id="list" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        tree.tree_role
+        ORDER BY
+        id
+    </select>
+
+    <sql id="ListItemQueryFields">
+        <if test="true">
+            id,
+            name,
+            description
+        </if>
+    </sql>
+
+    <resultMap id="ListItemResultMap" type="com.lonton.tree.treemenu.pojo.vo.RoleListItemVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+    </resultMap>
+</mapper>
