@@ -1,6 +1,7 @@
 package com.lonton.tree.treemenu.controller;
 
 import com.lonton.tree.treemenu.common.util.Result;
+import com.lonton.tree.treemenu.mapper.TreeMenuRoleMapper;
 import com.lonton.tree.treemenu.pojo.entity.TreeMenu;
 import com.lonton.tree.treemenu.mapper.TreeMenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class TreeMenuController {
 
     @Autowired
     TreeMenuMapper treeMenuMapper;
+    @Autowired
+    TreeMenuRoleMapper treeMenuRoleMapper;
 
     /**
      * 获取根节点菜单
@@ -158,4 +161,73 @@ public class TreeMenuController {
         // 返回根节点
         return root;
     }
+
+
+//    /**
+//     * 根据角色查询菜单
+//     *
+//     * @param role 角色
+//     * @return 菜单数据
+//     */
+//    @GetMapping("/role/{role}")
+//    public List<TreeMenu> getMenuByRole(@PathVariable String role) {
+//        List<TreeMenu> menuList = null;
+//        switch (role) {
+//            case "root":
+//                menuList = getMenuDataForRoot();
+//                break;
+//            case "month":
+//                menuList = getMenuDataForMonth();
+//                break;
+//            case "quarter":
+//                menuList = getMenuDataForQuarter();
+//                break;
+//            case "year":
+//                menuList = getMenuDataForYear();
+//                break;
+//            default:
+//                // 如果角色不存在，则返回空菜单列表
+//                menuList = new ArrayList<>();
+//                break;
+//        }
+//        return menuList;
+//    }
+//
+//
+//    /**
+//     * 查询 root 角色的菜单数据
+//     *
+//     * @return root 角色的菜单数据
+//     */
+//    private List<TreeMenu> getMenuDataForRoot() {
+//        return treeMenuRoleMapper.getMenuDataForRoot();
+//    }
+//
+//    /**
+//     * 查询 month 角色的菜单数据
+//     *
+//     * @return month 角色的菜单数据
+//     */
+//    private List<TreeMenu> getMenuDataForMonth() {
+//        return treeMenuRoleMapper.getMenuDataForMonth();
+//    }
+//
+//    /**
+//     * 查询 quarter 角色的菜单数据
+//     *
+//     * @return quarter 角色的菜单数据
+//     */
+//    private List<TreeMenu> getMenuDataForQuarter() {
+//        return treeMenuRoleMapper.getMenuDataForQuarter();
+//    }
+//
+//    /**
+//     * 查询 year 角色的菜单数据
+//     *
+//     * @return year 角色的菜单数据
+//     */
+//    private List<TreeMenu> getMenuDataForYear() {
+//        return treeMenuRoleMapper.getMenuDataForYear();
+//    }
+
 }
