@@ -1,16 +1,11 @@
-package com.lonton.tree.treemenu.pojo;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+package com.lonton.tree.treemenu.pojo.entity;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 菜单角色
- * </p>
+ * 菜单角色类
  *
  * @author 张利红
  */
@@ -22,7 +17,6 @@ public class TreeMenuRole implements Serializable {
       /**
      * 编号
      */
-        @TableId(value = "id", type = IdType.AUTO)
       private Long id;
 
       /**
