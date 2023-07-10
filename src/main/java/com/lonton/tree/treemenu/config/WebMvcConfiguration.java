@@ -15,7 +15,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-
+    /**
+     * 添加跨域配置
+     *
+     * @param registry 配置跨域访问的注册表
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")//访问路径(你要访问我什么东西,我允许你访问)

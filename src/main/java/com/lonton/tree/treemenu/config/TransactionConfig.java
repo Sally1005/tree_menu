@@ -55,7 +55,7 @@ public class TransactionConfig {
 
         DefaultTransactionAttribute txAttr_REQUIRED_READONLY = new DefaultTransactionAttribute();
         /**
-         * transactiondefinition 定义事务的隔离级别；
+         * transaction definition 定义事务的隔离级别；
          * PROPAGATION_NOT_SUPPORTED 事务传播级别5，以非事务运行，如果当前存在事务，则把当前事务挂起
          */
         txAttr_REQUIRED_READONLY.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
@@ -80,8 +80,7 @@ public class TransactionConfig {
     /**
      * 利用AspectJExpressionPointcut设置切面=切点+通知（写成内部bean的方式）
      *
-     *
-     * @return
+     * @return 切面通知实现类
      */
     @Bean
     public Advisor txAdviceAdvisor() {
