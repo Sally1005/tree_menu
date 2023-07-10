@@ -12,20 +12,33 @@ import java.util.List;
  */
 @Repository
 public interface TreeMenuRoleMapper {
-//    /**
-//     * 根据角色菜单
-//     *
-//     * @param role 角色
-//     * @return 菜单数据
-//     */
-//    List<TreeMenu> getMenuByRole(@PathVariable("role") String role);
 
+    /**
+     * 获取超级管理员菜单数据
+     *
+     * @return 超级管理员权限下可展示的菜单树
+     */
     List<TreeMenu> getMenuDataForRoot();
 
+    /**
+     * 获取月度管理员菜单数据
+     *
+     * @return 月度管理员权限下可展示的菜单树
+     */
     List<TreeMenu> getMenuDataForMonth();
 
+    /**
+     * 获取季度管理员菜单数据
+     *
+     * @return 季度管理员权限下可展示的菜单树
+     */
     List<TreeMenu> getMenuDataForQuarter();
 
+    /**
+     * 获取年度管理员菜单数据
+     *
+     * @return 年度管理员权限下可展示的菜单树
+     */
     List<TreeMenu> getMenuDataForYear();
 
 }
