@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--该文件是对tree_dynamic_menu表的查询等操作 author：张利红-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lonton.tree.treemenu.mapper.TreeDynamicMenuMapper">
+
+    <resultMap type="com.lonton.tree.treemenu.pojo.entity.TreeDynamicMenu" id="TreeMenuMap">
+        <result property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="parentMenuId" column="parent_menu_id"/>
+        <result property="menuLevel" column="menu_level"/>
+        <result property="path" column="menu_url"/>
+        <result property="component" column="component"/>
+    </resultMap>
+
+    <!--List<TreeMenu> getAllTreeMenu();获取所有数据-->
+    <select id="getAllTreeMenu" resultType="com.lonton.tree.treemenu.pojo.entity.TreeDynamicMenu">
+        SELECT
+        menu_id, menu_name, parent_menu_id, menu_level
+        FROM tree_dynamic_menu
+        <where>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+            <if test="menuName != null and menuName != ''">
+                and name = #{name}
+            </if>
+            <if test="parentMenuId != null">
+                and parent_menu_id = #{parentMenuId}
+            </if>
+            <if test="menuLevel != null">
+                and menu_level = #{menuLevel}
+            </if>
+        </where>
+        ORDER BY
+        menu_id
+    </select>
+
+    <!--List<TreeMenu> getRootMenus();获取根节点菜单-->
+    <select id="getRootMenus" resultType="com.lonton.tree.treemenu.pojo.entity.TreeDynamicMenu">
+        SELECT
+        menu_id, menu_name, parent_menu_id, menu_level
+        FROM tree_dynamic_menu
+        <where>
+            parent_menu_id = 0
+        </where>
+        ORDER BY
+        menu_id
+    </select>
+
+    <!--List<TreeMenu> getChildren(@Param("menuId") Long menuId);根据父节点查询子节点数据-->
+    <select id="getChildren" resultType="com.lonton.tree.treemenu.pojo.entity.TreeDynamicMenu">
+        SELECT
+        menu_id, menu_name, parent_menu_id, menu_level
+        FROM tree_dynamic_menu
+        <where>
+            parent_menu_id = #{menuId}
+        </where>
+        ORDER BY
+        parent_menu_id ASC,menu_id ASC
+    </select>
+
+    <!--List<TreeMenu> buildTree();构建菜单树-->
+    <select id="buildTree" resultMap="TreeMenuMap">
+        SELECT menu_id,
+               menu_name,
+               parent_menu_id,
+               menu_level
+        FROM tree_dynamic_menu
+        ORDER BY menu_level
+    </select>
+
+    <!--getMenuById(Long menuId);根据菜单ID查询-->
+    <select id="getMenuById" resultMap="TreeMenuMap">
+        SELECT *
+        FROM tree_dynamic_menu
+        WHERE menu_id = #{menuId}
+    </select>
+
+    <!--List<TreeMenu> searchItems(String menuName);根据菜单名称查询（SQL递归）-->
+    <select id="searchItems" resultMap="TreeMenuMap">
+        WITH RECURSIVE tree AS (SELECT menu_id
+                                     , menu_name
+                                     , parent_menu_id
+                                     , menu_level
+                                FROM tree_dynamic_menu
+                                WHERE menu_name LIKE CONCAT('%', #{menuName}, '%')
+                                UNION ALL
+                                SELECT t1.menu_id, t1.menu_name, t1.parent_menu_id, t1.menu_level
+                                FROM tree_menu t1
+                                         INNER JOIN
+                                     tree ON t1.menu_id = tree.parent_menu_id)
+        SELECT menu_id
+             , menu_name
+             , parent_menu_id
+             , menu_level
+        FROM tree_dynamic_menu
+        ORDER BY menu_level, menu_id
+    </select>
+
+    <!--List<TreeDynamicMenu> findListByUserId(@Param("userId") Long userId);根据用户Id查询菜单-->
+    <select id="findListByUserId" resultMap="TreeMenuMap">
+        select DISTINCT tm.*
+        from tree_user_role tur
+                 join tree_menu_role tmr
+                      on tur.role_id = tmr.role_id
+                 join tree_dynamic_menu tm
+                      on tm.menu_id = tmr.menu_id
+        where tur.user_id = #{userId}
+    </select>
+
+</mapper>
+
