@@ -162,72 +162,41 @@ public class TreeMenuController {
         return root;
     }
 
+    /**
+     * 查询月度、季度、年度菜单
+     *
+     * @param menuId menuId
+     * @return 菜单树
+     */
+    @GetMapping("/menus/{menuId}")
+    public Result getAllMonthMenu(@PathVariable Long menuId) {
+        // 创建一个空的TreeMenu列表
+        List<TreeMenu> menus = new ArrayList<>();
+        // 通过menuId获取的TreeMenu对象添加到menus列表中
+        menus.add(treeMenuMapper.getMenuById(menuId));
+        // 遍历menus列表中的每个TreeMenu对象
+        for (TreeMenu menu : menus) {
+            // 检查menu对象是否非空且menuId不为空
+            if (menu != null && menu.getMenuId() != null) {
+                // 调用isLeaf方法判断menu是否为叶子节点
+                Boolean leaf = isLeaf(menu.getMenuId());
+                // 将叶子节点的信息设置到menu对象中
+                menu.setIsLeaf(leaf);
+            }
+        }
+        // 返回一个成功的响应结果，并将menus列表作为数据返回
+        return Result.ok().data("menus", menus);
+    }
 
-//    /**
-//     * 根据角色查询菜单
-//     *
-//     * @param role 角色
-//     * @return 菜单数据
-//     */
-//    @GetMapping("/role/{role}")
-//    public List<TreeMenu> getMenuByRole(@PathVariable String role) {
-//        List<TreeMenu> menuList = null;
-//        switch (role) {
-//            case "root":
-//                menuList = getMenuDataForRoot();
-//                break;
-//            case "month":
-//                menuList = getMenuDataForMonth();
-//                break;
-//            case "quarter":
-//                menuList = getMenuDataForQuarter();
-//                break;
-//            case "year":
-//                menuList = getMenuDataForYear();
-//                break;
-//            default:
-//                // 如果角色不存在，则返回空菜单列表
-//                menuList = new ArrayList<>();
-//                break;
-//        }
-//        return menuList;
-//    }
-//
-//
-//    /**
-//     * 查询 root 角色的菜单数据
-//     *
-//     * @return root 角色的菜单数据
-//     */
-//    private List<TreeMenu> getMenuDataForRoot() {
-//        return treeMenuRoleMapper.getMenuDataForRoot();
-//    }
-//
-//    /**
-//     * 查询 month 角色的菜单数据
-//     *
-//     * @return month 角色的菜单数据
-//     */
-//    private List<TreeMenu> getMenuDataForMonth() {
-//        return treeMenuRoleMapper.getMenuDataForMonth();
-//    }
-//
-//    /**
-//     * 查询 quarter 角色的菜单数据
-//     *
-//     * @return quarter 角色的菜单数据
-//     */
-//    private List<TreeMenu> getMenuDataForQuarter() {
-//        return treeMenuRoleMapper.getMenuDataForQuarter();
-//    }
-//
-//    /**
-//     * 查询 year 角色的菜单数据
-//     *
-//     * @return year 角色的菜单数据
-//     */
-//    private List<TreeMenu> getMenuDataForYear() {
-//        return treeMenuRoleMapper.getMenuDataForYear();
-//    }
-
+    /**
+     * 根据名称查询
+     *
+     * @param menuName 菜单名
+     * @return 菜单树
+     */
+    @GetMapping("/menus/search/{menuId}/{menuName}")
+    public Result searchMenus(@PathVariable Long menuId, @PathVariable String menuName) {
+        List<TreeMenu> menus = searchItems(menuName);
+        return Result.ok().data("menus", menus);
+    }
 }
