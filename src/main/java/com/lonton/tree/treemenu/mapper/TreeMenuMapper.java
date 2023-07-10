@@ -42,7 +42,7 @@ public interface TreeMenuMapper {
      * @param menuId 菜单id
      * @return 菜单树
      */
-    List<TreeMenu> getMenuById(@Param("menuId")Long menuId);
+    TreeMenu getMenuById(@Param("menuId")Long menuId);
 
     /**
      * 根据菜单名称查询
@@ -52,5 +52,12 @@ public interface TreeMenuMapper {
      */
     List<TreeMenu> searchItems(@Param("menuName") String menuName);
 
+    /**
+     * 根据用户Id查询菜单
+     *
+     * @param userId 用户Id
+     * @return 菜单树
+     */
+    List<TreeMenu> findListByUserId(@Param("userId") Long userId);
 }
 
