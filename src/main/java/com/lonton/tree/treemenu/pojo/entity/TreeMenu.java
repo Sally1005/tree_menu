@@ -10,7 +10,6 @@ import java.util.List;
 
 /**
  * 树形菜单实体类
- * <p/>
  *
  * @author 张利红
  */
