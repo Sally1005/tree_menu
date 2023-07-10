@@ -22,7 +22,7 @@ public interface UserMapper {
      * @param user 用户数据
      * @return 受影响的行数
      */
-    int insert(User  user);
+    int insert(User user);
 
     /**
      * 更新用户数据
@@ -74,12 +74,14 @@ public interface UserMapper {
 
     /**
      * 启用用户账号
+     *
      * @param id 用户id
      */
     void setEnable(Long id);
 
     /**
      * 禁用用户账号
+     *
      * @param id 用户id
      */
     void setDisable(Long id);
