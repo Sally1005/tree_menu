@@ -7,8 +7,6 @@ import java.io.Serializable;
 
 /**
  * 统一的响应结果类型
- *
- * @author 张利红
  */
 @Data
 public class JsonResult<T> implements Serializable {
@@ -40,7 +38,7 @@ public class JsonResult<T> implements Serializable {
     public static JsonResult<Void> fail(GlobalException e) {
         return fail(e.getCode(), e.getMessage());
     }
-    public static JsonResult<String> error(Integer state, String message) {
+    public static <T> JsonResult<T> error(Integer state, String message) {
         JsonResult jsonResult = new JsonResult();
         jsonResult.setState(state);
         jsonResult.setMessage(message);
