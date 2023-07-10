@@ -5,18 +5,48 @@
  Source Server Type    : MySQL
  Source Server Version : 100307 (10.3.7-MariaDB)
  Source Host           : localhost:3306
- Source Schema         : tree
+ Source Schema         : study
 
  Target Server Type    : MySQL
  Target Server Version : 100307 (10.3.7-MariaDB)
  File Encoding         : 65001
- Author                : 张利红
 
- Date: 29/06/2023 15:18:35
+ Date: 10/07/2023 14:33:21
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for tree_dynamic_menu(动态菜单表)
+-- ----------------------------
+DROP TABLE IF EXISTS `tree_dynamic_menu`;
+CREATE TABLE `tree_dynamic_menu`  (
+                                      `menu_id` bigint NOT NULL COMMENT '动态菜单id',
+                                      `menu_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单名',
+                                      `parent_menu_id` bigint NULL DEFAULT NULL COMMENT '当前菜单的父菜单ID',
+                                      `menu_level` bigint NULL DEFAULT NULL COMMENT '当前菜单的层级',
+                                      `menu_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '当前菜单地址',
+                                      `icon` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+                                      `gmt_create` datetime NULL DEFAULT NULL COMMENT '数据创建时间',
+                                      `gmt_modified` varchar(0) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '数据最后修改时间',
+                                      `is_delete` tinyint(1) NULL DEFAULT NULL COMMENT '是否删除  -1：已删除  0：正常',
+                                      `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对应前端组件',
+                                      PRIMARY KEY (`menu_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of tree_dynamic_menu(动态菜单数据)
+-- ----------------------------
+INSERT INTO `tree_dynamic_menu` VALUES (1000, '测试父菜单', 0, 1, '/test/parent', NULL, NULL, NULL, 0, NULL);
+INSERT INTO `tree_dynamic_menu` VALUES (1001, '测试子菜单', 1000, 2, '/test/child', NULL, NULL, NULL, 0, NULL);
+INSERT INTO `tree_dynamic_menu` VALUES (10000, '用户管理', 0, 1, NULL, NULL, NULL, NULL, 0, NULL);
+INSERT INTO `tree_dynamic_menu` VALUES (20000, '菜单管理', 0, 1, NULL, NULL, NULL, NULL, 0, NULL);
+INSERT INTO `tree_dynamic_menu` VALUES (100001, '添加用户', 10000, 2, '/sys/user/add-new', NULL, NULL, NULL, 0, 'sys-user/UserAddNewView');
+INSERT INTO `tree_dynamic_menu` VALUES (100002, '用户列表', 10000, 2, '/sys/user/list', NULL, NULL, NULL, 0, 'sys-user/UserListView');
+INSERT INTO `tree_dynamic_menu` VALUES (200001, '月度', 20000, 2, '/sys/menu/month', NULL, NULL, NULL, 0, 'sys-menu/MonthMenuView');
+INSERT INTO `tree_dynamic_menu` VALUES (200002, '季度', 20000, 2, '/sys/menu/quarter', NULL, NULL, NULL, 0, 'sys-menu/QuarterMenuView');
+INSERT INTO `tree_dynamic_menu` VALUES (200003, '年度', 20000, 2, '/sys/menu/year', NULL, NULL, NULL, 0, 'sys-menu/YearMenuView');
 
 -- ----------------------------
 -- Table structure for tree_menu(菜单表)
@@ -24,12 +54,12 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `tree_menu`;
 CREATE TABLE `tree_menu`  (
                               `menu_id` bigint NOT NULL AUTO_INCREMENT COMMENT '当前菜单ID',
-                              `menu_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单名',
+                              `menu_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单名',
                               `parent_menu_id` bigint NULL DEFAULT NULL COMMENT '当前菜单的父菜单ID',
                               `menu_level` bigint NULL DEFAULT NULL COMMENT '当前菜单的层级',
-                              `perms` varchar(6553) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限',
-                              `menu_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-                              `menu_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前菜单地址',
+                              `perms` varchar(6553) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限',
+                              `menu_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                              `menu_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '当前菜单地址',
                               `type` int NULL DEFAULT NULL COMMENT '类型   0：目录   1：菜单   2：按钮',
                               `icon` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
                               `gmt_create` datetime NULL DEFAULT NULL COMMENT '数据创建时间',
@@ -37,7 +67,7 @@ CREATE TABLE `tree_menu`  (
                               `is_delete` tinyint NULL DEFAULT 0 COMMENT '是否删除  -1：已删除  0：正常',
                               PRIMARY KEY (`menu_id`) USING BTREE,
                               INDEX `tree_menu_idx`(`menu_id` ASC, `menu_level` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 135 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 200004 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tree_menu(菜单数据)
@@ -174,9 +204,10 @@ INSERT INTO `tree_menu` VALUES (129, '环境保护基本概况', 100, 2, NULL, N
 INSERT INTO `tree_menu` VALUES (130, '香港特别行政区主要社会经济指标', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tree_menu` VALUES (131, '澳门特别行政区主要社会经济指标', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tree_menu` VALUES (132, '台湾省主要社会经济指标', 100, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tree_menu` VALUES (135, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 -- ----------------------------
--- Table structure for tree_menu_role(菜单角色关系表)
+-- Table structure for tree_menu_role(菜单角色表)
 -- ----------------------------
 DROP TABLE IF EXISTS `tree_menu_role`;
 CREATE TABLE `tree_menu_role`  (
@@ -187,15 +218,32 @@ CREATE TABLE `tree_menu_role`  (
                                    `gmt_modified` datetime NULL DEFAULT NULL COMMENT '数据最后修改时间',
                                    `parent_id` bigint NULL DEFAULT NULL COMMENT '角色父级id',
                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单角色' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4200004 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单角色' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tree_menu_role(菜单角色数据)
 -- ----------------------------
-INSERT INTO `tree_menu_role` VALUES (1, 1, 4, NULL, NULL, 4);
-INSERT INTO `tree_menu_role` VALUES (2, 54, 3, NULL, NULL, 4);
-INSERT INTO `tree_menu_role` VALUES (3, 100, 2, NULL, NULL, 4);
-INSERT INTO `tree_menu_role` VALUES (4, NULL, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (1000, 1000, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (1001, 1001, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (10000, 10000, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (20000, 20000, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (100001, 100001, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (100002, 100002, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (200001, 200001, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (200002, 200002, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (200003, 200003, 1, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (210000, 10000, 2, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (220000, 20000, 2, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (310000, 10000, 3, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (320000, 20000, 3, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (410000, 10000, 4, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (420000, 20000, 4, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (2100002, 100002, 2, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (2200003, 200003, 2, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (3100002, 100002, 3, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (3200003, 200002, 3, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (4100002, 100002, 4, NULL, NULL, NULL);
+INSERT INTO `tree_menu_role` VALUES (4200003, 200001, 4, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tree_permission(权限表)
@@ -203,11 +251,11 @@ INSERT INTO `tree_menu_role` VALUES (4, NULL, 1, NULL, NULL, NULL);
 DROP TABLE IF EXISTS `tree_permission`;
 CREATE TABLE `tree_permission`  (
                                     `id` bigint NOT NULL COMMENT '编号',
-                                    `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '名称',
-                                    `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '值',
-                                    `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '描述',
+                                    `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                    `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '值',
+                                    `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
                                     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tree_permission(权限数据)
@@ -223,10 +271,10 @@ INSERT INTO `tree_permission` VALUES (4, '用户-读取', '/tree/user/read', '�
 DROP TABLE IF EXISTS `tree_role`;
 CREATE TABLE `tree_role`  (
                               `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '编号',
-                              `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '角色名称',
-                              `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                              `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色名称',
+                              `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
                               PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tree_role(角色数据)
@@ -237,7 +285,7 @@ INSERT INTO `tree_role` VALUES (3, 'quarter', '季度管理员');
 INSERT INTO `tree_role` VALUES (4, 'month', '月度管理员');
 
 -- ----------------------------
--- Table structure for tree_role_permission(角色权限关系表)
+-- Table structure for tree_role_permission(角色权限表)
 -- ----------------------------
 DROP TABLE IF EXISTS `tree_role_permission`;
 CREATE TABLE `tree_role_permission`  (
@@ -245,7 +293,7 @@ CREATE TABLE `tree_role_permission`  (
                                          `permission_id` bigint NULL DEFAULT NULL COMMENT '权限id',
                                          `role_id` bigint NULL DEFAULT NULL COMMENT '角色id',
                                          PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tree_role_permission(角色权限数据)
@@ -253,7 +301,9 @@ CREATE TABLE `tree_role_permission`  (
 INSERT INTO `tree_role_permission` VALUES (1, 1, 1);
 INSERT INTO `tree_role_permission` VALUES (2, 2, 1);
 INSERT INTO `tree_role_permission` VALUES (3, 3, 1);
-INSERT INTO `tree_role_permission` VALUES (4, 4, 2);
+INSERT INTO `tree_role_permission` VALUES (22, 2, 2);
+INSERT INTO `tree_role_permission` VALUES (23, 2, 3);
+INSERT INTO `tree_role_permission` VALUES (24, 2, 4);
 
 -- ----------------------------
 -- Table structure for tree_user(用户表)
@@ -261,13 +311,13 @@ INSERT INTO `tree_role_permission` VALUES (4, 4, 2);
 DROP TABLE IF EXISTS `tree_user`;
 CREATE TABLE `tree_user`  (
                               `id` bigint NOT NULL AUTO_INCREMENT COMMENT '用户编号',
-                              `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '用户名',
-                              `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '昵称',
-                              `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
+                              `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+                              `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称',
+                              `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
                               `role_id` bigint NULL DEFAULT NULL COMMENT '角色编号',
                               `enable` tinyint NULL DEFAULT NULL COMMENT '是否启用，1=启用，0=未启用',
                               PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tree_user(用户数据)
@@ -289,7 +339,7 @@ CREATE TABLE `tree_user_role`  (
                                    `user_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
                                    `role_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '角色id',
                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户角色' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tree_user_role(用户角色数据)
