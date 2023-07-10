@@ -42,7 +42,7 @@ public class UserMapperTest {
     }
     @Test
     void testGetLoginInfoByUsername(){
-        String username ="root";
+        String username ="year";
         UserLoginInfoVO loginInfoByUsername =  userMapper.getLoginInfoByUserName(username);
         log.debug("根据用户名【{}】查询用户的登录相关信息：{}", username, loginInfoByUsername);
     }

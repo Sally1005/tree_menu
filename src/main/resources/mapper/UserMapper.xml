@@ -86,7 +86,7 @@
     </select>
     <sql id="StandardQueryFields">
         <if test="true">
-            user_id, user_name, password,nick_name, enable
+            id, user_name, password,nick_name, enable
         </if>
     </sql>
 
