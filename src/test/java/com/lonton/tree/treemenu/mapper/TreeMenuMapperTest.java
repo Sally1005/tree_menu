@@ -24,7 +24,7 @@ public class TreeMenuMapperTest {
     @Test
     public void testGetAllTreeMenu() {
         List<TreeMenu> allTreeMenus =  treeMenuMapper.getAllTreeMenu();
-        assertEquals(132,allTreeMenus.size(),"树形菜单节点的个数与实际个数不符。");
+        assertEquals(133,allTreeMenus.size(),"树形菜单节点的个数与实际个数不符。");
     }
 
     @Test
@@ -42,14 +42,14 @@ public class TreeMenuMapperTest {
 
     @Test
     public void testGetMenuById() {
-        List<TreeMenu> menu = treeMenuMapper.getMenuById(1L);
+        TreeMenu menu = treeMenuMapper.getMenuById(1L);
         TreeMenu expected = new TreeMenu();
         expected.setMenuId(1L)
                 .setParentMenuId(0L)
                 .setMenuName("月度")
                 .setMenuLevel(1L)
                 .setIsLeaf(false);
-        assertEquals(expected.toString(),menu.get(0).toString(),"树形菜单节点属性与期望值不匹配。");
+        assertEquals(expected.getMenuId(),menu.getMenuId(),"树形菜单节点属性与期望值不匹配。");
 
     }
 
