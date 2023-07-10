@@ -7,12 +7,15 @@ import com.lonton.tree.treemenu.mapper.UserMapper;
 import com.lonton.tree.treemenu.mapper.UserRoleMapper;
 import com.lonton.tree.treemenu.pojo.dto.UserAddNewDTO;
 import com.lonton.tree.treemenu.pojo.dto.UserLoginDTO;
-import com.lonton.tree.treemenu.pojo.entity.User;
-import com.lonton.tree.treemenu.pojo.entity.UserRole;
+import com.lonton.tree.treemenu.pojo.entity.*;
 import com.lonton.tree.treemenu.pojo.vo.UserListItemVO;
+import com.lonton.tree.treemenu.pojo.vo.UserLoginVO;
 import com.lonton.tree.treemenu.pojo.vo.UserStandardVO;
 import com.lonton.tree.treemenu.security.LoginPrincipal;
 import com.lonton.tree.treemenu.security.UserDetails;
+import com.lonton.tree.treemenu.service.DynamicMenuService;
+import com.lonton.tree.treemenu.service.MenuService;
+import com.lonton.tree.treemenu.service.RoleService;
 import com.lonton.tree.treemenu.web.JsonResult;
 import com.lonton.tree.treemenu.web.ServiceCode;
 import io.jsonwebtoken.Jwts;
@@ -34,8 +37,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.Resource;
 import java.util.*;
-
 /**
  * 用户管理
  *
@@ -56,56 +59,56 @@ public class UserController {
     AuthenticationManager authenticationManager;
     @Value("${tree-menu.jwt.secret-key}")
     private String secretKey;
+    @Resource
+    private MenuService menuService;
+    @Resource
+    private DynamicMenuService dynamicMenuService;
+    @Resource
+    private RoleService roleService;
 
-    /**
-     * 用户登录
-     *
-     * @param userLoginDTO 用户登录的数据传输对象
-     * @return JsonResult 返回登录结果
-     */
     @ApiOperation("用户登录")
     @PostMapping("/login")
-    public JsonResult<String> login(@Validated UserLoginDTO userLoginDTO) {
+    public JsonResult<UserLoginVO> login(@Validated UserLoginDTO userLoginDTO) {
         // 检查用户名是否为空
         if (userLoginDTO.getUserName() == null || userLoginDTO.getUserName().trim().isEmpty()) {
-            return JsonResult.error(ServiceCode.ERR_NOT_FOUND, "用户名不能为空。");
+            return JsonResult.error(ServiceCode.ERR_NOT_FOUND,"用户名不能为空。");
         }
+        // 日志
         log.debug("开始处理【用户登录】的请求：{}", userLoginDTO);
-        String jwt = loginn(userLoginDTO);
-        return JsonResult.ok(jwt);
+
+        // 处理用户登录
+        UserDetails loginUser = this.doLogin(userLoginDTO);
+        // 生成jwt
+        String userCertificate = this.generateUserCertificate(loginUser);
+        // 查询用户树形菜单
+        List<TreeDynamicMenu> treeMenuList = dynamicMenuService.findTreeMenuListByUserId(loginUser.getId());
+        // 查询用户角色列表
+        List<Role> roleList = roleService.findListByUserId(loginUser.getId());
+        UserLoginVO userLoginVo = UserLoginVO.builder()
+                .jwt(userCertificate)
+                .menuList(treeMenuList)
+                .roleList(roleList)
+                .build();
+        return JsonResult.ok(userLoginVo);
     }
 
     /**
-     * 用户登录私有方法
+     * 生成用户凭证
      *
-     * @param userLoginDTO 用户登录的数据传输对象
-     * @return string
+     * @param loginUser 登录用户
+     * @return 凭证
      */
-    private String loginn(UserLoginDTO userLoginDTO) {
-        log.debug("开始处理【用户登录】的业务，参数：{}", userLoginDTO);
-        //调用authenticationManager执行认证
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userLoginDTO.getUserName(), userLoginDTO.getPassword());
-        authenticationManager.authenticate(authentication);
-        log.debug("认证通过");
-        Authentication authenticateResult = authenticationManager.authenticate(authentication);
-        log.debug("认证通过，返回的结果：{}", authenticateResult);
-        log.debug("认证通过返回的结果Principal的类型：{}",
-                authenticateResult.getPrincipal().getClass().getName());
-
-        UserDetails loginUser = (UserDetails) authenticateResult.getPrincipal();
-        log.debug("认证结果中的用户：{}", loginUser.getUsername());
+    private String generateUserCertificate(UserDetails loginUser) {
         Collection<GrantedAuthority> authorities = loginUser.getAuthorities();
-        log.debug("认证结果中的权限列表：{}", authorities);
         // 【重要】将权限列表转换成JSON格式，用于存储到JWT中
         String authorityListString = JSON.toJSONString(authorities);
-
         // 生成JWT
         log.debug("开始生成secretKey:{}", secretKey);
         // 准备Claims
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", loginUser.getId());
         claims.put("authorities", authorityListString);
+        claims.put("username", loginUser.getUsername());
         log.debug("生成JWT，向JWT中存入id：{}", loginUser.getId());
         log.debug("生成JWT，向JWT中存入authorities：{}", authorityListString);
         // JWT的组成部分：Header（头），Payload（载荷），Signature（签名）
@@ -121,35 +124,45 @@ public class UserController {
                 .compact();
         log.debug("生成的JWT：{}", jwt);
         return jwt;
-
     }
 
-    /**
-     * 添加用户
-     *
-     * @param userAddNewDTO  新增用户的数据传输对象
-     * @param loginPrincipal 当前登录用户的凭据
-     * @return JsonResult 返回添加用户的结果
-     */
+    private UserDetails doLogin(UserLoginDTO userLoginDTO) {
+        // 日志
+        log.debug("开始处理【用户登录】的业务，参数：{}", userLoginDTO);
+        //调用authenticationManager执行认证
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userLoginDTO.getUserName(), userLoginDTO.getPassword());
+        authenticationManager.authenticate(authentication);
+        log.debug("认证通过");
+        Authentication authenticateResult = authenticationManager.authenticate(authentication);
+        log.debug("认证通过，返回的结果：{}", authenticateResult);
+        log.debug("认证通过返回的结果Principal的类型：{}",
+                authenticateResult.getPrincipal().getClass().getName());
+        UserDetails loginUser = (UserDetails) authenticateResult.getPrincipal();
+        log.debug("认证结果中的用户：{}", loginUser.getUsername());
+        Collection<GrantedAuthority> authorities = loginUser.getAuthorities();
+        log.debug("认证结果中的权限列表：{}", authorities);
+
+        return loginUser;
+    }
+
     @ApiOperation("添加用户")
     @PostMapping("/add-new")//检查 数据多 涉及密码
     @PreAuthorize("hasAuthority('/tree/user/update')")
     public JsonResult<Void> addNew(@Validated UserAddNewDTO userAddNewDTO,
                                    @ApiIgnore @AuthenticationPrincipal LoginPrincipal loginPrincipal) {
-
+        // 日志
         log.debug("开始处理【添加用户】的请求：{}", userAddNewDTO);
         log.debug("当前登陆的用户(当事人）的id：{}", loginPrincipal.getId());
         log.debug("当前登陆的用户(当事人）名：{}", loginPrincipal.getUserName());
+        // 调用Service对象实现添加
         addNew(userAddNewDTO);
+        // 返回
         return JsonResult.ok();
     }
 
-    /**
-     * 添加用户私有方法
-     *
-     * @param userAddNewDTO 增用户的数据传输对象
-     */
     private void addNew(UserAddNewDTO userAddNewDTO) {
+        // 日志
         log.debug("开始处理【添加用户】的业务，参数：{}", userAddNewDTO);
         // 从参数中获取尝试添加的用户的用户名
         String username = userAddNewDTO.getUserName();
@@ -167,13 +180,14 @@ public class UserController {
         User user = new User();
 
         // 调用BeanUtils.copyProperties()方法将参数的属性值复制到以上user对象中
-        BeanUtils.copyProperties(userAddNewDTO, user);
+        BeanUtils.copyProperties(userAddNewDTO,user);
 
         //对原密码进行加密
         String rawPassword = user.getPassword();
         String encodePassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encodePassword);
 
+        // 日志
         log.debug("即将插入用户数据：{}", user);
         // 调用userMapper对象的insert()方法插入数据，并获取返回的受影响的行数
         int rows = userMapper.insert(user);
@@ -207,28 +221,16 @@ public class UserController {
         }
     }
 
-    /**
-     * 根据id删除用户
-     *
-     * @param id 用户id
-     * @return JsonResult 返回删除用户的结果
-     */
-    // http://localhost:8081/users/delete
     @ApiOperation("根据id删除用户")
     @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "long")
     @PreAuthorize("hasAuthority('/tree/user/delete')")
     @PostMapping("/{id:[0-9]+}/delete")
-    public JsonResult<Void> deleteById(@PathVariable Long id) {
+    public JsonResult deleteById(@PathVariable Long id) {
         log.debug("准备处理【根据id删除用户】的请求：id={}", id);
         deleteByIdd(id);
         return JsonResult.ok();
     }
 
-    /**
-     * 根据id删除用户私有方法
-     *
-     * @param id 用户id
-     */
     private void deleteByIdd(Long id) {
         log.debug("开始处理【根据id删除用户】的业务：id={}", id);
         // 调用userMapper根据参数id执行查询
@@ -251,13 +253,6 @@ public class UserController {
         }
     }
 
-    /**
-     * 启用用户账号
-     *
-     * @param id 用户id
-     * @return JsonResult 返回启用用户账号的结果
-     */
-    // http://localhost:8081/users/enable
     @ApiOperation("启用用户账号")
     @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "long")
     @PreAuthorize("hasAuthority('/tree/user/update')")
@@ -268,14 +263,6 @@ public class UserController {
         return JsonResult.ok();
     }
 
-
-    /**
-     * 禁用用户账号
-     *
-     * @param id 用户id
-     * @return JsonResult 返回禁用用户账号的结果
-     */
-    //http://localhost:8081/users/disable
     @ApiOperation("禁用用户账号")
     @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "long")
     @PreAuthorize("hasAuthority('/tree/user/update')")
@@ -286,11 +273,6 @@ public class UserController {
         return JsonResult.ok();
     }
 
-    /**
-     * 查询用户列表
-     *
-     * @return JsonResult 返回用户列表
-     */
     @ApiOperation("查询用户列表")
     @PreAuthorize("hasAuthority('/tree/user/read')")
     @GetMapping("")
