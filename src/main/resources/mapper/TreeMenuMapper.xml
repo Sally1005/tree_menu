@@ -46,7 +46,7 @@
     </select>
 
     <!--List<TreeMenu> getChildren(@Param("menuId") Long menuId);根据父节点查询子节点数据-->
-    <select id="getChildren" resultType="com.lonton.tree.treemenu.pojo.entity.TreeMenu">
+    <select id="getChildren" resultMap="TreeMenuMap">
         SELECT
         menu_id, menu_name, parent_menu_id, menu_level
         FROM tree_menu
@@ -57,7 +57,7 @@
         parent_menu_id ASC,menu_id ASC
     </select>
 
-    <!--List<TreeMenu> buildTree();-->
+    <!--List<TreeMenu> buildTree();构建菜单树-->
     <select id="buildTree" resultMap="TreeMenuMap">
         SELECT menu_id,
                menu_name,
@@ -93,6 +93,17 @@
              , menu_level
         FROM tree
         ORDER BY menu_level, menu_id
+    </select>
+
+    <!--List<TreeMenu> findListByUserId(@Param("userId") Long userId);根据用户Id查询菜单-->
+    <select id="findListByUserId" resultMap="TreeMenuMap">
+        select DISTINCT tm.*
+        from tree_user_role tur
+                 join tree_menu_role tmr
+                      on tur.role_id = tmr.role_id
+                 join tree_menu tm
+                      on tm.menu_id = tmr.menu_id
+        where tur.user_id = #{userId}
     </select>
 
 </mapper>

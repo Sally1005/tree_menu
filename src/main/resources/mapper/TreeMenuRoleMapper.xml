@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--该文件是对tree_menu_role表的查询等操作 author：张利红-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lonton.tree.treemenu.mapper.TreeMenuRoleMapper">
+
     <!-- resultMap 定义查询结果的映射关系 -->
     <resultMap id="TreeMenuResultMap" type="com.lonton.tree.treemenu.pojo.entity.TreeMenu">
         <id column="menu_id" property="menuId"/>
@@ -10,32 +12,40 @@
         <result column="is_leaf" property="isLeaf"/>
         <result column="is_delete" property="isDelete"/>
     </resultMap>
-    <!-- 查询 root 角色的菜单数据 -->
+
+    <!--List<TreeMenu> getMenuDataForRoot();查询超级管理员角色的菜单数据 -->
     <select id="getMenuDataForRoot" resultMap="TreeMenuResultMap">
         SELECT tm.*
         FROM tree_menu tm
         WHERE tm.is_delete = 0
         ORDER BY tm.menu_level, tm.menu_id
     </select>
-    <!-- 查询 month 角色的菜单数据 -->
+
+    <!--List<TreeMenu> getMenuDataForMonth();查询月度角色的菜单数据 -->
     <select id="getMenuDataForMonth" resultMap="TreeMenuResultMap">
         SELECT tm.*
         FROM tree_menu tm
-        WHERE tm.menu_id = 1 AND tm.is_delete = 0
+        WHERE tm.menu_id = 1
+          AND tm.is_delete = 0
         ORDER BY tm.menu_level, tm.menu_id
     </select>
-    <!-- 查询 quarter 角色的菜单数据 -->
+
+    <!-- List<TreeMenu> getMenuDataForQuarter();查询季度角色的菜单数据 -->
     <select id="getMenuDataForQuarter" resultMap="TreeMenuResultMap">
         SELECT tm.*
         FROM tree_menu tm
-        WHERE tm.menu_id = 54 AND tm.is_delete = 0
+        WHERE tm.menu_id = 54
+          AND tm.is_delete = 0
         ORDER BY tm.menu_level, tm.menu_id
     </select>
-    <!-- 查询 year 角色的菜单数据 -->
+
+    <!--List<TreeMenu> getMenuDataForYear();查询年度角色的菜单数据 -->
     <select id="getMenuDataForYear" resultMap="TreeMenuResultMap">
         SELECT tm.*
         FROM tree_menu tm
-        WHERE tm.menu_id = 100 AND tm.is_delete = 0
+        WHERE tm.menu_id = 100
+          AND tm.is_delete = 0
         ORDER BY tm.menu_level, tm.menu_id
     </select>
+
 </mapper>

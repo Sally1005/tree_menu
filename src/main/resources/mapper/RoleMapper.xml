@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!--该文件是对tree_role表的查询等操作 author：张利红-->
 <!DOCTYPE mapper PUBLIC  "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lonton.tree.treemenu.mapper.RoleMapper">
 
-    <!-- List<RoleListItemVO> list(); -->
+    <!-- List<RoleListItemVO> list();查询角色列表 -->
     <select id="list" resultMap="ListItemResultMap">
         SELECT
         <include refid="ListItemQueryFields"/>
@@ -11,6 +11,15 @@
         tree.tree_role
         ORDER BY
         id
+    </select>
+
+    <!-- List<Role> findListByUserId(@Param("userId") Long userId);查询当前用户下的角色列表-->
+    <select id="findListByUserId" resultType="com.lonton.tree.treemenu.pojo.entity.Role">
+        SELECT *
+        FROM tree_role tr
+                 LEFT JOIN tree_user_role tur
+                           ON tr.id = tur.role_id
+        WHERE tur.user_id = #{userId}
     </select>
 
     <sql id="ListItemQueryFields">

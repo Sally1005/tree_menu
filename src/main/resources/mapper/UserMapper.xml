@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--该文件是对tree_user表的查询等操作 author：张利红-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lonton.tree.treemenu.mapper.UserMapper">
+
+    <!--int insert(User user);插入用户数据-->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO tree.tree_user(user_name, nick_name, password, enable)
         VALUES (#{userName}, #{nickName}, #{password}, #{enable})
     </insert>
 
+    <!--int countByUserName(String userName);根据用户名统计管理员的数量-->
     <select id="countByUserName" resultType="int">
         SELECT count(*)
         FROM tree.tree_user
@@ -13,7 +17,7 @@
 
     </select>
 
-    <!-- UserLoginInfoVO getLoginInfoByUserName(String userName); -->
+    <!-- UserLoginInfoVO getLoginInfoByUserName(String userName);根据用户名查询用户的登录信息 -->
     <select id="getLoginInfoByUserName" resultMap="LoginResultMap">
         SELECT
         <include refid="LoginQueryFields"/>
@@ -49,7 +53,7 @@
         </collection>
     </resultMap>
 
-    <!-- List<UserListItemVO> list(); -->
+    <!-- List<UserListItemVO> list();查询用户列表 -->
     <select id="list" resultMap="ListResultMap">
         SELECT
         <include refid="ListQueryFields"/>
@@ -71,7 +75,7 @@
         <result column="enable" property="enable"/>
     </resultMap>
 
-    <!-- UserStandardVO getStandardById(Long id); -->
+    <!-- UserStandardVO getStandardById(Long id);根据id查询用户详情 -->
     <select id="getStandardById" resultMap="StandardResultMap">
         SELECT
         <include refid="StandardQueryFields"/>
@@ -94,14 +98,14 @@
         <result column="enable" property="enable"/>
     </resultMap>
 
-    <!-- int deleteById(Long id); -->
+    <!-- int deleteById(Long id);根据id删除用户数据 -->
     <delete id="deleteById">
         DELETE
         FROM tree.tree_user
         WHERE id = #{id}
     </delete>
 
-    <!--int update(User user);-->
+    <!--int update(User user);更新用户数据-->
     <update id="update">
         UPDATE
         tree_user
@@ -123,14 +127,14 @@
         id=#{id}
     </update>
 
-    <!-- setEnable(Long id); -->
+    <!-- setEnable(Long id);启用用户账号 -->
     <update id="setEnable">
         UPDATE tree_user
         SET enable = 1
         WHERE id = #{id}
     </update>
 
-    <!-- setDisable(Long id); -->
+    <!-- setDisable(Long id);禁用用户账号 -->
     <update id="setDisable">
         UPDATE tree_user
         SET enable = 0

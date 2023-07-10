@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--该文件是对tree_user_role表的查询等操作 author：张利红-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.lonton.tree.treemenu.mapper.UserRoleMapper">
 
-    <!-- int insert(UserRole userRole); -->
+    <!-- int insert(UserRole userRole);插入用户与角色的关联数据 -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO tree_user_role (user_id, role_id)
         VALUES (#{userId}, #{roleId})
     </insert>
 
-    <!-- int insertBatch(UserRole[] userRoleList); -->
+    <!-- int insertBatch(UserRole[] userRoleList);批量插入用户与角色的关联数据 -->
     <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO tree_user_role
         (user_id, role_id)
@@ -19,7 +19,7 @@
         </foreach>
     </insert>
 
-    <!-- int deleteByUserId(Long userId); -->
+    <!-- int deleteByUserId(Long userId);根据用户id删除用户与角色的关联数据 -->
     <delete id="deleteByUserId">
         DELETE
         FROM tree.tree_user_role
