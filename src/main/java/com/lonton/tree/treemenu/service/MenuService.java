@@ -18,4 +18,6 @@ public interface MenuService {
      * @return 树结构菜单
      */
     List<TreeMenu> findTreeMenuListByUserId(Long userId);
+
+    List<TreeMenu> getAllMenuByMenuId(Long menuId);
 }

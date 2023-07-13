@@ -30,6 +30,40 @@ public class MenuServiceImpl implements MenuService {
         return this.buildTree(menuList);
     }
 
+    @Override
+    public List<TreeMenu> getAllMenuByMenuId(Long menuId) {
+        // 根据菜单ID获取菜单
+        TreeMenu menuById = menuMapper.getMenuById(menuId);
+        // 获取子菜单列表
+        List<TreeMenu> childrenList = menuMapper.getChildren(menuId);
+        // 加载菜单
+        loadMenus(menuById,childrenList);
+        List<TreeMenu> result = new ArrayList<>();
+        result.add(menuById);
+        return result;
+    }
+
+    /**
+     * 加载菜单
+     *
+     * @param menuById 菜单
+     * @param childrenList 子菜单列表
+     */
+    private void loadMenus(TreeMenu menuById, List<TreeMenu> childrenList) {
+        // 设置子菜单列表
+        menuById.setChildren(childrenList);
+        for (TreeMenu treeMenu : childrenList) {
+            // 获取子菜单的子菜单列表
+            List<TreeMenu> children = menuMapper.getChildren(treeMenu.getMenuId());
+            // 如果子菜单列表为空，则结束递归
+            if (children.isEmpty()) {
+                return;
+            }
+            // 递归加载子菜单
+            loadMenus(treeMenu, children);
+        }
+    }
+
     /**
      * 构建菜单树
      *

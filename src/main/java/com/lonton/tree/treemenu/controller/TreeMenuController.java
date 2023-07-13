@@ -4,6 +4,7 @@ import com.lonton.tree.treemenu.common.util.Result;
 import com.lonton.tree.treemenu.mapper.TreeMenuRoleMapper;
 import com.lonton.tree.treemenu.pojo.entity.TreeMenu;
 import com.lonton.tree.treemenu.mapper.TreeMenuMapper;
+import com.lonton.tree.treemenu.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -34,6 +36,8 @@ public class TreeMenuController {
     TreeMenuMapper treeMenuMapper;
     @Autowired
     TreeMenuRoleMapper treeMenuRoleMapper;
+    @Resource
+    MenuService menuService;
 
     /**
      * 获取根节点菜单
@@ -169,34 +173,8 @@ public class TreeMenuController {
      * @return 菜单树
      */
     @GetMapping("/menus/{menuId}")
-    public Result getAllMonthMenu(@PathVariable Long menuId) {
-        // 创建一个空的TreeMenu列表
-        List<TreeMenu> menus = new ArrayList<>();
-        // 通过menuId获取的TreeMenu对象添加到menus列表中
-        menus.add(treeMenuMapper.getMenuById(menuId));
-        // 遍历menus列表中的每个TreeMenu对象
-        for (TreeMenu menu : menus) {
-            // 检查menu对象是否非空且menuId不为空
-            if (menu != null && menu.getMenuId() != null) {
-                // 调用isLeaf方法判断menu是否为叶子节点
-                Boolean leaf = isLeaf(menu.getMenuId());
-                // 将叶子节点的信息设置到menu对象中
-                menu.setIsLeaf(leaf);
-            }
-        }
-        // 返回一个成功的响应结果，并将menus列表作为数据返回
-        return Result.ok().data("menus", menus);
-    }
-
-    /**
-     * 根据名称查询
-     *
-     * @param menuName 菜单名
-     * @return 菜单树
-     */
-    @GetMapping("/menus/search/{menuId}/{menuName}")
-    public Result searchMenus(@PathVariable Long menuId, @PathVariable String menuName) {
-        List<TreeMenu> menus = searchItems(menuName);
+    public Result getAllMenuByMenuId(@PathVariable Long menuId) {
+        List<TreeMenu> menus = menuService.getAllMenuByMenuId(menuId);
         return Result.ok().data("menus", menus);
     }
 }
