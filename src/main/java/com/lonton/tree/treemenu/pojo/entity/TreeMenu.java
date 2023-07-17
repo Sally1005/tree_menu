@@ -59,6 +59,11 @@ public class TreeMenu implements Serializable {
     private Integer isDelete;
 
     /**
+     * 菜单路径
+     */
+    private String menuTreePath;
+
+    /**
      * 无参构造
      */
     public TreeMenu() {
