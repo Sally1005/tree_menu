@@ -177,4 +177,17 @@ public class TreeMenuController {
         List<TreeMenu> menus = menuService.getAllMenuByMenuId(menuId);
         return Result.ok().data("menus", menus);
     }
+
+    /**
+     * 查询月度、季度、年度菜单
+     *
+     * @param menuId   menuId
+     * @param menuName menuName
+     * @return 菜单树
+     */
+    @GetMapping("/menus/{menuId}/{menuName}")
+    public Result searchMenuByName(@PathVariable Long menuId, @PathVariable String menuName) {
+        List<TreeMenu> menus = menuService.searchMenuByName(menuId, menuName);
+        return Result.ok().data("menus", menus);
+    }
 }
