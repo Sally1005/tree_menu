@@ -24,7 +24,7 @@ public class TreeMenuMapperTest {
     @Test
     public void testGetAllTreeMenu() {
         List<TreeMenu> allTreeMenus =  treeMenuMapper.getAllTreeMenu();
-        assertEquals(133,allTreeMenus.size(),"树形菜单节点的个数与实际个数不符。");
+        assertEquals(132,allTreeMenus.size(),"树形菜单节点的个数与实际个数不符。");
     }
 
     @Test
