@@ -19,5 +19,20 @@ public interface MenuService {
      */
     List<TreeMenu> findTreeMenuListByUserId(Long userId);
 
+    /**
+     * 根据菜单Id获取树形菜单列表
+     *
+     * @param menuId 菜单Id
+     * @return 树结构菜单
+     */
     List<TreeMenu> getAllMenuByMenuId(Long menuId);
+
+    /**
+     * 根据菜单Id和菜单名称查询菜单
+     *
+     * @param menuId  菜单Id
+     * @param menuName 菜单名称
+     * @return 菜单树
+     */
+    List<TreeMenu> searchMenuByName(Long menuId, String menuName);
 }
