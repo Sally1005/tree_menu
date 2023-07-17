@@ -2,6 +2,7 @@ package com.lonton.tree.treemenu.mapper;
 
 import com.lonton.tree.treemenu.pojo.entity.TreeMenu;
 
+import com.lonton.tree.treemenu.pojo.vo.MenuSearchVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -59,5 +60,21 @@ public interface TreeMenuMapper {
      * @return 菜单树
      */
     List<TreeMenu> findListByUserId(@Param("userId") Long userId);
+
+    /**
+     * 根据菜单Id和菜单名称查询菜单
+     *
+     * @param menuSearchVO 菜单查询VO类
+     * @return 菜单树
+     */
+    List<TreeMenu> searchMenuByIdAndName(MenuSearchVO menuSearchVO);
+
+    /**
+     * 根据菜单Id列表获取到对应的菜单列表
+     *
+     * @param allMenuId 菜单Id列表
+     * @return 菜单Id列表获取到对应的菜单列表
+     */
+    List<TreeMenu> findListByMenuIds(@Param("allMenuId") List<Long> allMenuId);
 }
 
