@@ -106,5 +106,24 @@
         where tur.user_id = #{userId}
     </select>
 
+    <!--List<TreeMenu> searchMenuByIdAndName(MenuSearchVO menuSearchVO);根据菜单Id和菜单名称查询菜单-->
+    <select id="searchMenuByIdAndName" parameterType="com.lonton.tree.treemenu.pojo.vo.MenuSearchVO"
+            resultMap="TreeMenuMap">
+        SELECT *
+        FROM tree_menu
+        WHERE menu_tree_path LIKE CONCAT('-', #{menuId}, '-')
+          AND menu_name LIKE CONCAT('%', #{menuName}, '%')
+    </select>
+
+    <!--List<TreeMenu> findListByMenuIds(@Param("allMenuId") List<Long> allMenuId);根据菜单Id列表获取到对应的菜单列表-->
+    <select id="findListByMenuIds" parameterType="list" resultMap="TreeMenuMap">
+        SELECT *
+        FROM tree_menu
+        WHERE menu_id in
+        <foreach item='id' collection='allMenuId' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </select>
+
 </mapper>
 
