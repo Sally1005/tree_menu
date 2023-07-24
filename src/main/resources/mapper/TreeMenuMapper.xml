@@ -8,6 +8,7 @@
         <result property="menuName" column="menu_name"/>
         <result property="parentMenuId" column="parent_menu_id"/>
         <result property="menuLevel" column="menu_level"/>
+        <result property="menuTreePath" column="menu_tree_path"/>
     </resultMap>
 
     <!--List<TreeMenu> getAllTreeMenu();获取所有数据-->
@@ -111,7 +112,7 @@
             resultMap="TreeMenuMap">
         SELECT *
         FROM tree_menu
-        WHERE menu_tree_path LIKE CONCAT('-', #{menuId}, '-')
+        WHERE menu_tree_path LIKE CONCAT('-', #{menuId}, '-','%')
           AND menu_name LIKE CONCAT('%', #{menuName}, '%')
     </select>
 
