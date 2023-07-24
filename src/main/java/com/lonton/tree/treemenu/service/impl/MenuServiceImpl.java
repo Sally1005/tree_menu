@@ -54,30 +54,36 @@ public class MenuServiceImpl implements MenuService {
         // 设置了菜单ID和菜单名称
         menuSearchVO.setMenuName(menuName);
         menuSearchVO.setMenuId(menuId);
-        List<TreeMenu> searchMenus = menuMapper.searchMenuByIdAndName(menuSearchVO);
-        // 存储所有菜单ID
+       return menuMapper.searchMenuByIdAndName(menuSearchVO);
+
+    }
+
+    @Override
+    public List<TreeMenu> queryPath(Long menuId) {
+        // 根据菜单ID获取菜单对象
+        TreeMenu menuById = menuMapper.getMenuById(menuId);
+        // 存储所有菜单ID的集合
         Set<Long> allMenuIds = new HashSet<>();
-        // 遍历获取所有符合条件的菜单路径,并以"-"分割菜单树路径字符串
-        for (TreeMenu searchMenu : searchMenus) {
-            String[] split = searchMenu.getMenuTreePath().split("-");
-            // 逐个判断分割后的子字符串是否为数字，如果是数字，则将其转换为Long类型,并添加到一个集合中(allMenuIds)
-            for (String s : split) {
-                if (StringUtils.isNumber(s)) {
-                    allMenuIds.add(Long.valueOf(s));
-                }
+        // 获取菜单树路径
+        String menuTreePath = menuById.getMenuTreePath();
+        // 将菜单树路径根据"-"进行分割
+        String[] split = menuTreePath.split("-");
+        // 遍历分割后的字符串数组
+        for (String s : split) {
+            // 判断字符串是否为数字且不等于菜单ID本身
+            if(StringUtils.isNumber(s) && !Long.valueOf(s).equals(menuId)){
+                // 将符合条件的菜单ID添加到集合中
+                allMenuIds.add(Long.valueOf(s));
             }
         }
-        // 如果没有搜索到符合条件的菜单，此时返回一个空的ArrayList
-        if (allMenuIds.size() == 0) {
+        // 如果菜单ID集合为空，则返回一个空列表
+        if(allMenuIds.size() == 0){
             return new ArrayList<>();
         }
-        // 如果allMenuIds集合不为空，则将其转换为一个menuIdList列表
+        // 将菜单ID集合转换为列表
         List<Long> menuIdList = new ArrayList<>(allMenuIds);
-        // 调用menuMapper的findListByMenuIds方法，根据菜单ID列表获取到对应的菜单列表
-        List<TreeMenu> menuList = menuMapper.findListByMenuIds(menuIdList);
-        // 调用buildTree方法，将菜单列表构建成一个树形结构
-        return buildTree(menuList);
-
+        // 根据菜单ID列表查询菜单列表并返回
+        return menuMapper.findListByMenuIds(menuIdList);
     }
 
     /**

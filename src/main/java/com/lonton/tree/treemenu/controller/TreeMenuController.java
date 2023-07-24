@@ -190,4 +190,14 @@ public class TreeMenuController {
         List<TreeMenu> menus = menuService.searchMenuByName(menuId, menuName);
         return Result.ok().data("menus", menus);
     }
+
+
+    /**
+     * 查询树路径
+     */
+    @GetMapping("/menus/queryPath/{menuId}")
+    public Result queryPath(@PathVariable Long menuId) {
+        List<TreeMenu> menus = menuService.queryPath(menuId);
+        return Result.ok().data("menus", menus);
+    }
 }

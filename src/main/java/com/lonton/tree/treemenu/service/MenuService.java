@@ -35,4 +35,12 @@ public interface MenuService {
      * @return 菜单树
      */
     List<TreeMenu> searchMenuByName(Long menuId, String menuName);
+
+    /**
+     * 根据菜单Id查询菜单路径
+     *
+     * @param menuId 菜单Id
+     * @return 菜单树
+     */
+    List<TreeMenu> queryPath(Long menuId);
 }
