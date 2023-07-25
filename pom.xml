@@ -107,6 +107,12 @@ http://maven.apache.org/POM/4.0.0 ">
             <artifactId>httpcore</artifactId>
             <version>4.4.13</version>
         </dependency>
+        <!-- Knife4j Spring Boot：在线API -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>2.0.9</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
