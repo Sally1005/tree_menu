@@ -2,17 +2,17 @@ package com.lonton.tree.treemenu.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * Swagger配置类 <p/>
+ * Knife4j 接口文档配置 <p>
+ * https://doc.xiaominfo.com/knife4j/documentation/get_start.html
  * <ol>
  *    <li>接口的文档在线自动生成
  *    <li>前后端分离，功能测试
@@ -20,36 +20,23 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  *
  * @author 张利红
  */
-
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {
-    /**
-     * 构建Docket对象
-     *
-     * @return Docket对象
-     */
+@Profile("dev")
+public class Knife4jConfiguration {
+
     @Bean
-    public Docket buildDocket() {
+    public Docket defaultApi2() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(buildApiInfo())
+                .apiInfo(new ApiInfoBuilder()
+                        .title("project-backend")
+                        .description("project-backend")
+                        .version("1.0")
+                        .build())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.lonton.tree.treemenu")) // 要扫描的API(Controller)基础包
+                // 指定 Controller 扫描包路径
+                .apis(RequestHandlerSelectors.basePackage("com.lonton.tree.treemenu.controller"))
                 .paths(PathSelectors.any())
                 .build();
-    }
-
-    /**
-     * 构建ApiInfo对象
-     *
-     * @return ApiInfo对象
-     */
-    private ApiInfo buildApiInfo() {
-        Contact contact = new Contact("Sally", "", "");
-        return new ApiInfoBuilder()
-                .title("权限管理API文档")
-                .description("后台api")
-                .contact(contact)
-                .version("1.0.0").build();
     }
 }
